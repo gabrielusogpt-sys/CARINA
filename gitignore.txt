@@ -1,0 +1,22 @@
+# Arquivos de Cache e Bytecode do Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Pasta do Ambiente Virtual
+# Esta é a linha mais importante para nós!
+venv/
+/venv/
+
+# Pastas de configuração de IDEs e Editores
+.vscode/
+.idea/
+
+# Arquivos de log e de banco de dados
+*.log
+*.sqlite3
+
+# Arquivos gerados pelo sistema operacional
+.DS_Store
+Thumbs.db

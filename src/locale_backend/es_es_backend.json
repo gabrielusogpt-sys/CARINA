@@ -1,0 +1,706 @@
+{
+  "action_authorizer": {
+    "reason": {
+      "child": "Fase de aprendizaje (NIÑO)",
+      "adult": "Control total (ADULTO)",
+      "teen_peak": "Horas pico en la adolescencia",
+      "teen_offpeak": "Control permitido (ADOLESCENTE)",
+      "unknown": "Madurez desconocida"
+    }
+  },
+  "actions": {
+    "change_phase": "CAMBIAR FASE",
+    "keep_phase": "MANTENER FASE",
+    "unknown": "DESCONOCIDA ({action})"
+  },
+  "asset_manager": {
+    "init": {
+      "created": "[ASSET_MANAGER] Gestor de Activos (Fachada) creado y especialistas instanciados."
+    }
+  },
+  "captum_analyzer": {
+    "run": {
+      "empty_memory_warning": "[CAPTUM_ANALYZER] La memoria XAI para el agente {agent_id} está vacía. No se puede generar el análisis.",
+      "text_report_success": "[CAPTUM_ANALYZER] Análisis textual guardado en: {path}",
+      "analysis_error": "[CAPTUM_ANALYZER] Fallo al generar el análisis: {error}"
+    }
+  },
+  "central_controller": {
+    "run": {
+      "simulation_ended": "Simulación terminada o conexión TraCI perdida.",
+      "initial_connection_fail": "[CONTROLLER] Fallo en la conexión inicial con SUMO. Terminando proceso.",
+      "keyboard_interrupt": "[CONTROLLER] Interrupción de teclado recibida.",
+      "fatal_error": "[CONTROLLER] Error fatal en el orquestador: {error}",
+      "process_finished": "[CONTROLLER] Proceso del Controlador Central finalizado."
+    },
+    "shutdown": {
+      "sending_signal": "Enviando señal de apagado al proceso de IA...",
+      "signal_error": "No se pudo enviar la señal de apagado a la IA: {error}"
+    },
+    "main_loop": {
+      "starting": "[CONTROLLER] Orquestador iniciado. Entrando en el bucle principal de simulación."
+    }
+  },
+  "childhood_analyzer": {
+    "init": {
+      "analyzer_created": "[CHILDHOOD_ANALYZER] Analizador de Entorno creado."
+    },
+    "cache": {
+      "found": "[CHILDHOOD] Caché de análisis de infancia encontrado en: {path}",
+      "loading": "[CHILDHOOD] Cargando perfiles de tráfico y línea base desde el caché.",
+      "load_error": "[CHILDHOOD] Error al cargar el caché de análisis de infancia: {error}",
+      "saving": "[CHILDHOOD] Guardando perfiles de tráfico y línea base en el caché.",
+      "save_error": "[CHILDHOOD] Error al guardar el caché de análisis de infancia: {error}"
+    },
+    "run": {
+      "no_rules_warning": "[CHILDHOOD] No se encontraron reglas de tiempo en la configuración. Devolviendo perfiles predeterminados.",
+      "start": "[CHILDHOOD] Análisis de tráfico de 'infancia' iniciado...",
+      "analyzing_episodes": "   L- Analizando {count} episodios.",
+      "complete": "[CHILDHOOD] Análisis de infancia completo. Recompensa media de línea base: {reward}"
+    }
+  },
+  "connection_manager": {
+    "import": {
+      "sumo_tools_path": "Ruta a las herramientas de SUMO añadida: {path}",
+      "traci_loaded": "Módulo TraCI cargado con éxito desde: {path}",
+      "traci_critical_fail": "FALLO CRÍTICO: No se pudo importar TraCI. Por favor, verifique si la variable de entorno 'SUMO_HOME' está configurada correctamente."
+    },
+    "init": {
+      "manager_created": "[CONN_MANAGER] Gestor de Conexión SUMO creado."
+    },
+    "connect": {
+      "waiting_for_sumo": "Esperando a que SUMO cargue un escenario en el puerto {port}...",
+      "open_sumocfg_prompt": "Por favor, abra SUMO y su archivo .sumocfg.",
+      "success": "✅ ÉXITO: Conexión con SUMO establecida.",
+      "scenario_loaded": "   L- Escenario Cargado: {scenario}",
+      "fatal_error": "[CONN_MANAGER] Fallo fatal al conectar con SUMO."
+    },
+    "close": {
+      "closing": "[CONN_MANAGER] Cerrando conexión con SUMO...",
+      "already_lost": "[CONN_MANAGER] La conexión con SUMO ya se había perdido al intentar cerrar.",
+      "no_connection": "[CONN_MANAGER] No hay conexión activa para cerrar."
+    }
+  },
+  "connector": {
+    "connecting": "[CONNECTOR] Conectando al Proxy TraCI...",
+    "connection_established": "✅ [CONNECTOR] 'Conexión' con el Proxy TraCI establecida."
+  },
+  "db_manager": {
+    "init": {
+      "manager_created": "[DB_MANAGER] Gestor de Base de Datos apuntando a: {path}",
+      "db_error": "[DB_MANAGER] Error al inicializar la base de datos: {error}"
+    },
+    "create_run": {
+      "success": "[DB_MANAGER] Nueva ejecución registrada con éxito (Escenario: {scenario}).",
+      "error": "[DB_MANAGER] Error al crear el registro de ejecución: {error}"
+    },
+    "log_episode": {
+      "error": "[DB_MANAGER] Error al guardar las métricas del episodio {episode}: {error}"
+    },
+    "log_report": {
+      "error": "[DB_MANAGER] Error al guardar el informe de análisis: {error}"
+    }
+  },
+  "db_worker": {
+    "run": {
+      "worker_started": "[DB_WORKER] Proceso del Trabajador de Base de Datos iniciado y listo para recibir datos.",
+      "shutdown_signal": "[DB_WORKER] Señal de apagado recibida.",
+      "unknown_log_type": "[DB_WORKER] Recibido tipo de registro desconocido: {type}",
+      "processing_error": "[DB_WORKER] Error al procesar el paquete de datos: {packet}",
+      "user_interrupt": "[DB_WORKER] Proceso terminado por el usuario.",
+      "fatal_error": "[DB_WORKER] Error fatal y no manejado en el trabajador: {error}",
+      "worker_finished": "[DB_WORKER] Proceso del Trabajador de Base de Datos finalizado."
+    }
+  },
+  "decision_orchestrator": {
+    "init": {
+      "created": "[DECISION_ORCHESTRATOR] Orquestador de Decisiones creado."
+    }
+  },
+  "episode_runner": {
+    "init": {
+      "created": "[EPISODE_RUNNER] Ejecutor de Episodios (modo IA puro) creado."
+    },
+    "run": {
+      "start_unified": "Iniciando Episodio {episode} (modo de entrenamiento unificado)"
+    }
+  },
+  "guardian_agent": {
+    "init": {
+      "success": "   -> [GUARDIÁN] Cerebro de IA (Dueling DQN) creado. AMP activado: {enabled}"
+    }
+  },
+  "health_monitor": {
+    "init": {
+      "monitor_created": "[HEALTH_MONITOR] Monitor de Salud de la IA creado con un tiempo de espera de {timeout}s."
+    },
+    "activity": {
+      "communication_reestablished": "[HEALTH_MONITOR] Comunicación con la IA restablecida."
+    },
+    "health_check": {
+      "failure": "[HEALTH_MONITOR] FALLO: Sin comunicación de la IA durante más de {timeout}s.",
+      "switching_to_watchdog": "[HEALTH_MONITOR] Señalando al controlador para cambiar al modo a prueba de fallos (Watchdog)."
+    }
+  },
+  "heatmap_renderer": {
+    "init": {
+      "created": "[HEATMAP_RENDERER] Renderizador de Mapas de Calor creado."
+    },
+    "run": {
+      "error": "[HEATMAP_RENDERER] Error al generar la imagen del mapa de calor: {error}"
+    }
+  },
+  "infra_analyzer": {
+    "init": {
+      "config_error": "La sección [INFRASTRUCTURE_ANALYSIS] no se encontró o está incompleta."
+    },
+    "unknown_scenario": "Escenario Desconocido",
+    "analyzer_created": "Gestor de Análisis de Infraestructura creado.",
+    "summary_first_run": "Primer análisis realizado.",
+    "change_new_junction": "nueva intersección {id} detectada",
+    "change_metric": "cambio de {percent}% en '{metric}' en la intersección {id}",
+    "summary_changes_detected": "Cambios significativos detectados: {changes}",
+    "summary_no_changes": "No se detectaron cambios significativos en las métricas de tráfico."
+  },
+  "init_orchestrator": {
+    "init": {
+      "created": "[INIT_ORCHESTRATOR] Ingeniero de Configuración creado."
+    },
+    "summary": {
+      "success": "[INIT_ORCHESTRATOR] Archivo de resumen 'status.json' creado con éxito en: {path}",
+      "critical_error": "[INIT_ORCHESTRATOR] FALLO CRÍTICO al escribir 'status.json': {error}"
+    },
+    "run": {
+      "start": "[INIT_ORCHESTRATOR] Orquestador de Inicialización tomando el control...",
+      "scenario_path_error": "No se pudo obtener la ruta del escenario de SUMO.",
+      "assets_dashboard": "[INIT_ORCHESTRATOR] Ordenando al Gestor de Activos que genere los activos del Tablero...",
+      "coords_file_error": "[INIT_ORCHESTRATOR] No se pudo generar el archivo de coordenadas porque no se devolvieron los datos del mapa.",
+      "assets_planning": "[INIT_ORCHESTRATOR] Generando mapa inicial para la pestaña de Planificación...",
+      "collecting_summary": "[INIT_ORCHESTRATOR] Recopilando datos para el resumen del sistema (topología de semáforos)...",
+      "complete": "[INIT_ORCHESTRATOR] Fase de Configuración completa. Entregando el control al Entrenador."
+    }
+  },
+  "launcher": {
+    "main": {
+      "preparing_processes": "Preparando los procesos del sistema CARINA...",
+      "starting_ui_process": "Iniciando el proceso de la UI desde: {path}",
+      "ui_started": " -> Interfaz de Usuario (UI) iniciada con PID: {pid}",
+      "starting_backend_processes": "Iniciando todos los procesos del ecosistema CARINA (backend)...",
+      "process_started_metrics": " -> {process_name} (PID: {pid}) [Métricas: http://localhost:{port}]",
+      "process_started_no_metrics": " -> {process_name} (PID: {pid})",
+      "system_running": "Sistema CARINA en pleno funcionamiento con frontend y backend.",
+      "interrupt_received": "\nSeñal de interrupción (Ctrl+C) recibida. Apagando...",
+      "terminating_ui": "   -> Terminando el proceso de la UI (PID: {pid})...",
+      "force_killing_ui": "   -> El proceso de la UI no terminó a tiempo. Forzando la terminación.",
+      "final_cleanup": "Realizando la limpieza final de los procesos del backend...",
+      "terminating_backend_process": "   -> Terminando el proceso {name} (PID: {pid})...",
+      "system_shutdown": "Sistema apagado."
+    }
+  },
+  "learning_coordinator": {
+    "init": {
+      "created": "[LEARNER] Coordinador de Aprendizaje creado."
+    },
+    "update": {
+      "trigger": "[LEARNER] Activando el ciclo de aprendizaje para los agentes."
+    }
+  },
+  "lifecycle_manager": {
+    "init": {
+      "manager_created": "[LIFECYCLE] Gestor de Ciclo de Vida creado.",
+      "checkpoint_dir_set": "[LIFECYCLE] Directorio de checkpoints para este escenario establecido en: '{path}'"
+    },
+    "create": {
+      "no_checkpoint_dir_error": "[LIFECYCLE] El directorio de checkpoints del escenario no ha sido configurado.",
+      "loading_checkpoints": "[LIFECYCLE] Creando agentes y cargando checkpoints desde '{path}'...",
+      "uniform_obs_size": "[LIFECYCLE] Tamaño de observación uniforme para todos los agentes: {size}",
+      "no_dna_found": "No se encontró ADN inicial para el agente {tl_id}. Omitiendo.",
+      "creation_complete": "[LIFECYCLE] Se crearon {num_agents} agentes y {num_guardians} guardianes en total."
+    },
+    "save": {
+      "starting_checkpoint": "--- INICIANDO CHECKPOINT ({reason}) en '{path}' ---",
+      "checkpoint_complete": "--- CHECKPOINT COMPLETADO ---"
+    }
+  },
+  "local_agent": {
+    "load": {
+      "obs_mismatch_warning": "[AGENTE {agent_id}] El tamaño de observación del checkpoint ({chk_obs}) difiere del actual ({cur_obs}).",
+      "success": "OK [AGENTE {agent_id}] Checkpoint cargado desde '{path}'. Memoria XAI con {count} muestras.",
+      "not_found_warning": "[AGENTE {agent_id}] No se encontró checkpoint en '{path}'. Creando agente desde cero.",
+      "error": "[AGENTE {agent_id}] Error al cargar el checkpoint: {error}"
+    }
+  },
+  "main_ai": {
+    "hardware_check": {
+      "starting": "INICIANDO DIAGNÓSTICO DE HARDWARE (PYTORCH)...",
+      "gpu_not_found": "No detectado o sin soporte CUDA",
+      "gpu_success": "✅ ÉXITO: GPU encontrada: {name}",
+      "gpu_not_found_warning": "❌ ADVERTENCIA: No se encontró ninguna GPU compatible con CUDA."
+    },
+    "load_settings": {
+      "critical_error": "FALLO CRÍTICO: El archivo de configuración no se encontró o está vacío en: {path}"
+    },
+    "run": {
+      "process_started": "[MAIN_IA] Proceso de IA iniciado y 'conectado' al Proxy TraCI."
+    }
+  },
+  "map_generator": {
+    "run": {
+      "net_file_not_found": "[MapGenerator] Archivo de red no encontrado en: {path}",
+      "netconvert_not_found": "[MapGenerator] CRÍTICO: Ejecutable 'netconvert' no encontrado. Verifique la variable de entorno SUMO_HOME.",
+      "generating_files": "[MapGenerator] Generando archivos de datos del mapa (.nod.xml, .edg.xml)...",
+      "success": "[MapGenerator] Archivos de datos generados con éxito con el prefijo: {prefix}",
+      "files_not_found_after_run": "[MapGenerator] Comando 'netconvert' ejecutado, pero no se encontraron los archivos de datos.",
+      "netconvert_error": "Error al ejecutar 'netconvert'. SUMO devolvió un error.",
+      "stderr_output": "Salida de Error (stderr):\n{stderr}",
+      "unexpected_error": "Error inesperado en MapGenerator: {error}"
+    }
+  },
+  "maturity_manager": {
+    "init": {
+      "manager_created": "[MATURITY_MANAGER] Director de la Escuela de Pilotaje creado.",
+      "performance_target": "   L- Objetivo de Rendimiento para Graduación (Línea Base): Recompensa > {target}"
+    },
+    "register": {
+      "agents_registered": "[MATURITY_MANAGER] {count} agentes registrados en la fase: {phase}."
+    },
+    "calibration": {
+      "thresholds_updated": "[MATURITY_MANAGER] Umbrales de confianza para ADULTO recibidos del Calibrador y activados."
+    },
+    "save": {
+      "success": "[MATURITY_MANAGER] Estado de madurez guardado con éxito en: {path}",
+      "error": "[MATURITY_MANAGER] Error al guardar el estado de madurez: {error}"
+    },
+    "load": {
+      "not_found": "[MATURITY_MANAGER] Archivo de estado de madurez no encontrado en '{path}'. Empezando de cero.",
+      "success": "[MATURITY_MANAGER] Estado de madurez cargado con éxito desde '{path}'.",
+      "error": "[MATURITY_MANAGER] Error al cargar el estado de madurez: {error}"
+    },
+    "phase_child": "Infancia",
+    "phase_teen": "Adolescencia",
+    "phase_adult": "Adulto",
+    "criterion_time": "Criterio: Tiempo de Servicio",
+    "criterion_performance": "Criterio: Rendimiento",
+    "criterion_confidence": "Criterio: Confianza",
+    "time_details": "{episodes_in_phase} de {required_episodes} episodios completados",
+    "performance_details": "Media {mean_performance:.2f} > Objetivo {baseline_target:.2f}",
+    "confidence_details": "Entropía {agent_entropy:.2f} < Umbral {entropy_threshold:.2f}",
+    "new_phase_message": "Nueva Fase: {phase_name}",
+    "criteria_met_header": "Criterios Cumplidos:",
+    "promotion_not_met_message": "no cumplió los requisitos para la promoción a la fase {target_phase_name}",
+    "criteria_status_header": "Estado de los Criterios:"
+  },
+  "maturity_reporter": {
+    "promotion": {
+      "title_graduated": "GRADUADO",
+      "title_promoted": "PROMOVIDO",
+      "header": "🎓 {title} | Agente: {agent_id}"
+    },
+    "rejection": {
+      "title": "Boletín de Evaluación",
+      "header": "📝 {title} | Agente: {agent_id} (Fase: {current_phase_name})"
+    }
+  },
+  "network_parser": {
+    "lane_to_edge": {
+      "start": "[PARSER] Construyendo mapa de traducción carril -> calle desde '{path}'...",
+      "success": "[PARSER] Mapa de traducción construido con éxito. {count} carriles mapeados.",
+      "file_not_found_error": "ERROR CRÍTICO: Archivo de red no encontrado en '{path}'.",
+      "processing_error": "ERROR al procesar el archivo de red para el mapa de traducción: {error}"
+    },
+    "structural_map": {
+      "start": "[PARSER] Construyendo mapa de vecindad ESTRUCTURAL desde el archivo de red...",
+      "reading_net_file": "   L- Leyendo archivo de red: {path}",
+      "neighborhood_found": "   L- Vecindad Estructural encontrada para '{tl_id}': {neighbors}",
+      "success": "[PARSER] Mapa de vecindad ESTRUCTURAL construido con éxito para {count} semáforos.",
+      "file_not_found_error": "ERROR: Archivo no encontrado durante el análisis estructural: {error}",
+      "processing_error": "ERROR al procesar el archivo de red para la vecindad estructural: {error}"
+    },
+    "routes_map": {
+      "obsolete_warning": "[PARSER] La función 'build_neighborhood_map_from_routes' está obsoleta y no se ejecutó."
+    }
+  },
+  "population_manager": {
+    "init": {
+      "manager_created": "[POP_MANAGER] Gestor de Población (PBT) creado.",
+      "evolution_freq": "    L- Frecuencia de Evolución: {freq} episodios.",
+      "exploit_percentile": "    L- Percentil de Explotación: {percentile}% de los peores agentes.",
+      "initializing_population": "[POP_MANAGER] Inicializando la población de agentes con ADN de PBT...",
+      "population_created": "[POP_MANAGER] Población con {count} agentes creada con éxito."
+    },
+    "evolve": {
+      "start_cycle": "\n--- CICLO DE EVOLUCIÓN PBT ---",
+      "no_scores_warning": "[PBT] No se calcularon puntuaciones de agentes. Omitiendo ciclo de evolución.",
+      "agent_copy": "  [PBT] El agente {worst_id} (puntuación: {worst_score}) copiará el ADN del agente {best_id} (puntuación: {best_score})",
+      "mutating_param": "    L- Mutando '{param}': {old_value} -> {new_value}",
+      "end_cycle": "--- FIN DEL CICLO DE EVOLUCIÓN ---\n"
+    }
+  },
+  "post_episode_coordinator": {
+    "init": {
+      "created": "[POST_EPISODE_COORDINATOR] Gestor de Turno (modo IA + DB) creado."
+    },
+    "run": {
+      "no_metrics_warning": "[POST_EPISODE] No se recibieron métricas del episodio. Omitiendo tareas.",
+      "db_queue_error": "[POST_EPISODE] Fallo al enviar métricas a la cola de la BD: {error}"
+    },
+    "checkpoint": {
+      "reason_promotion": "Promoción de Agente",
+      "reason_periodic": "Episodio {episode}"
+    }
+  },
+  "report_generator": {
+    "header": {
+      "title1": "======================================================================",
+      "title2": "==      CARINA - INFORME DE ANÁLISIS DE INFRAESTRUCTURA DE SEMÁFOROS     ==",
+      "title3": "======================================================================"
+    },
+    "general_data": {
+      "title": "DATOS GENERALES DEL ANÁLISIS",
+      "scenario": "Escenario Analizado",
+      "date": "Fecha del Análisis",
+      "duration": "Duración de la Simulación Base"
+    },
+    "summary": {
+      "title": "RESUMEN DE RECOMENDACIONES",
+      "junctions_analyzed": "Total de Intersecciones Relevantes Analizadas",
+      "recommendations": "Recomendaciones: {add} para AÑADIR, {remove} para QUITAR, {keep} para MANTENER."
+    },
+    "parameters": {
+      "title": "PARÁMETROS UTILIZADOS EN EL ANÁLISIS",
+      "min_vol_primary": "Volumen Mínimo (Vía Principal)",
+      "min_vol_secondary": "Volumen Mínimo (Vía Secundaria)",
+      "unacceptable_delay": "Retraso Medio Inaceptable",
+      "conflict_threshold": "Umbral de Eventos de Conflicto",
+      "removal_threshold": "Umbral de Eliminación (% del Vol.)"
+    },
+    "detailed_rec": {
+      "title1": "======================================================================",
+      "title2": "==                 RECOMENDACIONES DETALLADAS POR INTERSECCIÓN               ==",
+      "title3": "======================================================================"
+    },
+    "junction": {
+      "title": "ID DE INTERSECCIÓN: {id}",
+      "recommendation": "Recomendación Final",
+      "current_status": "Situación Actual",
+      "justification": "Justificación Principal",
+      "warrants_analysis": "ANÁLISIS DE WARRANTS",
+      "warrant_satisfied": "SATISFECHO",
+      "warrant_not_satisfied": "NO SATISFECHO",
+      "warrant1_volume": "WARRANT 1 (Volumen)",
+      "warrant2_delay": "WARRANT 2 (Retraso)",
+      "warrant4_safety": "WARRANT 4 (Seguridad)",
+      "observed_data": "DATOS OBSERVADOS",
+      "volume_primary_keep": "Volumen (Vía Principal):     {value} vehículos/hora (requiere > {threshold} para mantener)",
+      "volume_primary": "Volumen (Vía Principal):     {value} vehículos/hora (umbral: {threshold})",
+      "volume_secondary": "Volumen (Vía Secundaria):    {value} vehículos/hora (umbral: {threshold})",
+      "avg_delay": "Retraso Medio en Secundaria: {value} segundos (umbral: {threshold})",
+      "conflict_events": "Eventos de Conflicto:        {value} eventos (umbral: {threshold})"
+    },
+    "footer": {
+      "title1": "======================================================================",
+      "title2": "==                         FIN DEL INFORME                            ==",
+      "title3": "======================================================================",
+      "generated_by": "Generado por: CARINA - Controlled Artificial Road-traffic Intelligence Network Architecture"
+    }
+  },
+  "reporter": {
+    "creation": {
+      "agent_created": "   -> [CREACIÓN] Agente Local (PPO) y Guardián (DQN) creados para el ID de Semáforo: '{tl_id}'.",
+      "amp_status": "      L- Entrenamiento con precisión mixta (AMP) activado: {enabled}"
+    },
+    "graph": {
+      "title": "ANÁLISIS DE LA TOPOLOGÍA DE LA RED COMPLETADO",
+      "nodes": "  - Total de Semáforos (Nodos): {count}",
+      "edges": "  - Total de Conexiones (Aristas): {count}"
+    },
+    "step_header": "\n--- {message} ---",
+    "step_start": "PASO DE SIMULACIÓN {step} (Tiempo: {sim_time}s)",
+    "step_mode": "[CONTROL GLOBAL] Modo de Operación Actual: {mode}",
+    "agent_suggestion": "[🧠 AGENTE {tl_id} | {maturity_level}] Sugerencia: {action_str}",
+    "status_approved": "APROBADA",
+    "status_denied": "DENEGADA",
+    "system_decision": "    -> [SISTEMA] Decisión: {status} ({reason})",
+    "bulletin_header": "FIN DEL EPISODIO {episode_count} | BOLETÍN DE LA ESCUELA",
+    "bulletin_performance": "  - Rendimiento del Episodio: Recompensa Total = {total_reward}",
+    "bulletin_class_status": "  - Estado de la Clase: {adults} Adultos | {teens} Adolescentes | {children} Niños",
+    "bulletin_calibration_status": "  - Estado de la Calibración de Confianza: {status}",
+    "calib_status_done": "Completada",
+    "calib_status_ongoing": "En Progreso",
+    "override_suffix_alert": " - Modo Alerta",
+    "override_suffix_off": " - Desactivado"
+  },
+  "request_processor": {
+    "init": {
+      "processor_created": "[REQ_PROCESSOR] Procesador de Solicitudes (modo Despachador) creado."
+    },
+    "ui_command": {
+      "received": "[REQ_PROCESSOR] Comando de la UI recibido: TIPO={type}",
+      "processing_save": "-> Procesando comando 'save_settings'...",
+      "save_success": "-> Configuración guardada con éxito por SettingsManager.",
+      "processing_error": "[REQ_PROCESSOR] Error al procesar el comando de la UI: {error}"
+    },
+    "batch_collect": {
+      "error": "[REQ_PROCESSOR] Error durante la recopilación de datos por lotes: {error}"
+    },
+    "ai_request": {
+      "queue_full_warning": "[REQ_PROCESSOR] Una de las colas de servicio (SDS/SAS) está llena.",
+      "processing_error": "[REQ_PROCESSOR] Error al procesar la solicitud de la IA: {error}"
+    },
+    "watchdog": {
+      "processing_error": "[REQ_PROCESSOR] Error al procesar el comando del Watchdog: {error}"
+    },
+    "override": {
+      "ai_ignored": "[CONTROL GLOBAL] Sugerencia de la IA para '{tl_id}' ignorada. El semáforo está bajo intervención del operador (Estado: {state}).",
+      "manual_intervention": "[INTERVENCIÓN MANUAL] El semáforo '{semaphore_id}' ha sido puesto en modo '{state}' por el usuario."
+    }
+  },
+  "sas_collector": {
+    "init": {
+      "collector_created": "[SAS_COLLECTOR] Recolector de Datos de Análisis creado."
+    },
+    "reset": {
+      "data_reset": "[SAS_COLLECTOR] Los datos acumulados se han reiniciado para el siguiente ciclo."
+    },
+    "get_data": {
+      "data_processed": "[SAS_COLLECTOR] Datos acumulados procesados y listos para el análisis."
+    }
+  },
+  "sas_engine": {
+    "init": {
+      "engine_created": "[SAS_ENGINE] Motor de Análisis (modo +DB) creado."
+    },
+    "run": {
+      "analysis_skipped_no_data": "[SAS_ENGINE] Análisis omitido debido a una duración de simulación o una ruta de archivo de red no válidas.",
+      "report_sent_to_db": "[SAS_ENGINE] Informe de análisis enviado a la cola de la BD.",
+      "db_queue_error": "[SAS_ENGINE] Fallo al enviar el informe a la cola de la BD: {error}",
+      "analysis_complete": "[SAS_ENGINE] Ejecución del análisis completa.",
+      "processing_data": "[SAS_ENGINE] Procesando datos de simulación acumulados...",
+      "data_processed": "[SAS_ENGINE] Datos procesados para {count} intersecciones."
+    },
+    "map": {
+      "generating": "[SAS_ENGINE] Generando nuevo mapa de planificación con iconos de recomendación..."
+    },
+    "topology": {
+      "critical_error": "[SAS_ENGINE] Error crítico al construir la topología de la red: {error}",
+      "cannot_continue_error": "[SAS_ENGINE] No se pudo crear la topología de la red. El análisis no puede continuar."
+    },
+    "cache": {
+      "save_error": "[SAS_ENGINE] Error al guardar el archivo de caché."
+    },
+    "ui": {
+      "status_save_error": "[SAS_ENGINE] Error al guardar el archivo de estado para la UI."
+    }
+  },
+  "sas_orchestrator": {
+    "init": {
+      "analysis_frequency_set": "[SAS_ORCH] Frecuencia de análisis establecida en cada {freq}s de simulación.",
+      "config_error": "[SAS_ORCH] Sección [INFRASTRUCTURE_ANALYSIS] o claves de tiempo no encontradas. Usando valores predeterminados.",
+      "orchestrator_created": "[SAS_ORCH] Orquestador del SAS creado y especialistas instanciados."
+    },
+    "run": {
+      "main_loop_start": "[SAS_ORCH] Entrando en el bucle principal de recolección y análisis.",
+      "run_id_captured": "[SAS_ORCH] RUN_ID: {run_id} capturado para este ciclo de análisis.",
+      "analysis_triggered": "[SAS_ORCH] Disparador de análisis alcanzado en {time}s. Iniciando análisis...",
+      "analysis_skipped_no_run_id": "[SAS_ORCH] Análisis omitido porque aún no se ha recibido un RUN_ID válido.",
+      "analysis_cycle_complete": "[SAS_ORCH] Ciclo de análisis completo. El recolector ha sido reiniciado.",
+      "interrupt_received": "[SAS_ORCH] Señal de interrupción recibida. Apagando el orquestador.",
+      "fatal_error": "[SAS_ORCH] Error fatal en el bucle del orquestador: {error}",
+      "orchestrator_shutdown": "[SAS_ORCH] Orquestador del SAS apagado."
+    }
+  },
+  "sas_worker": {
+    "run": {
+      "user_interrupt": "[SAS_WORKER] Proceso del SAS terminado por el usuario.",
+      "fatal_error": "[SAS_WORKER] Error fatal y no manejado en el trabajador del SAS: {error}",
+      "worker_finished": "[SAS_WORKER] Proceso del trabajador del SAS finalizado."
+    }
+  },
+  "sds_processor": {
+    "init": {
+      "processor_created": "[SDS_PROCESSOR] Procesador de Datos (modo Canvas/JSON) creado."
+    }
+  },
+  "sds_orchestrator": {
+    "init": {
+      "orchestrator_created": "[SDS_ORCH] Orquestador del SDS creado y especialistas instanciados."
+    },
+    "run": {
+      "ws_thread_started": "[SDS_ORCH] Hilo del servidor WebSocket iniciado.",
+      "main_loop_start": "[SDS_ORCH] Entrando en el bucle principal de procesamiento de datos.",
+      "interrupt_received": "[SDS_ORCH] Señal de interrupción recibida. Apagando el orquestador.",
+      "fatal_error": "[SDS_ORCH] Error fatal en el bucle del orquestador: {error}",
+      "orchestrator_finished": "[SDS_ORCH] Orquestador del SDS finalizado."
+    }
+  },
+  "sds_websocket": {
+    "register": {
+      "client_connected": "[SDS_WS] Nuevo cliente conectado: {address}"
+    },
+    "unregister": {
+      "client_disconnected": "[SDS_WS] Cliente {address} desconectado."
+    },
+    "handler": {
+      "command_received": "[SDS_WS] Comando recibido de la UI: {command}",
+      "invalid_json": "[SDS_WS] Mensaje inválido (no JSON) recibido de {address}",
+      "queue_full": "[SDS_WS] La cola de comandos de la UI está llena. El comando de la UI fue descartado."
+    },
+    "main_loop": {
+      "server_started": "[SDS_WS] Servidor WebSocket del SDS iniciado en ws://{host}:{port}"
+    }
+  },
+  "sds_worker": {
+    "run": {
+      "user_interrupt": "[SDS_WORKER] Proceso del SDS terminado por el usuario.",
+      "fatal_error": "[SDS_WORKER] Error fatal y no manejado en el trabajador del SDS: {error}",
+      "worker_finished": "[SDS_WORKER] Proceso del trabajador del SDS finalizado."
+    }
+  },
+  "static_map_renderer": {
+    "init": {
+      "created": "[STATIC_MAP_RENDERER] Renderizador de Mapas Estáticos creado."
+    },
+    "run": {
+      "rendering_map": "[STATIC_MAP_RENDERER] Renderizando mapa de alta resolución en: {path}",
+      "render_complete": "[STATIC_MAP_RENDERER] Renderización del mapa completada: {filename}",
+      "critical_error_icons": "[STATIC_MAP_RENDERER] Error crítico al generar el mapa con iconos: {error}",
+      "critical_error_coords": "[STATIC_MAP_RENDERER] Error al generar el archivo de coordenadas: {error}"
+    }
+  },
+  "strategic_coordinator": {
+    "init": {
+      "created": "[STRATEGIC_COORD] Coordinador Estratégico (GAT) creado."
+    },
+    "initialize": {
+      "start": "[STRATEGIC_COORD] Inicializando el subsistema estratégico...",
+      "max_state_dim": "[STRATEGIC_COORD] Dimensión máxima del estado local (para relleno): {size}",
+      "model_created": "[STRATEGIC_COORD] Modelo Estratega GAT creado y movido al dispositivo: {device}."
+    }
+  },
+  "threshold_calibrator": {
+    "init": {
+      "created": "[THRESHOLD_CALIBRATOR] Calibrador de Confianza creado.",
+      "window_info": "   L- Se monitorizará la estabilidad durante una ventana de {window} episodios."
+    },
+    "step": {
+      "collecting_data": "[CALIBRATOR] Recopilando datos de entropía... ({current}/{total})",
+      "std_dev_check": "[CALIBRATOR] Desviación estándar de la entropía actual: {std_dev} (Umbral: {threshold})"
+    },
+    "calibrate": {
+      "plateau_detected": "[THRESHOLD_CALIBRATOR] ¡Meseta de entropía detectada! La curva de aprendizaje de confianza se ha estabilizado.",
+      "stable_value": "   L- Valor de entropía estable calculado: {value}",
+      "complete": "[THRESHOLD_CALIBRATOR] ¡Calibración completa!",
+      "teen_threshold": "   L- Umbral para Adolescente establecido en: Entropía < {threshold}",
+      "adult_threshold": "   L- Umbral para Adulto establecido en: Entropía < {threshold}"
+    }
+  },
+  "trainer": {
+    "shutdown": {
+      "signal_received": "[TRAINER] Señal de apagado gradual recibida del CentralController.",
+      "connection_lost": "[TRAINER] Se perdió la conexión con el CentralController. Iniciando apagado.",
+      "reason": "Apagado"
+    },
+    "run": {
+      "new_run_id": "--- NUEVA EJECUCIÓN REGISTRADA CON RUN_ID: {run_id} ---",
+      "db_error": "No se pudo crear un registro de ejecución en la base de datos. Abortando.",
+      "cache_not_found": "[TRAINER] Caché de análisis no encontrado. Ejecutando fase de análisis..."
+    },
+    "main": {
+      "keyboard_interrupt": "\n[TRAINER] Interrupción de teclado detectada. Apagando...",
+      "fatal_error": "Error fatal en el bucle del Entrenador: {error}",
+      "final_checkpoint": "Guardando el estado final de la IA antes de apagar...",
+      "service_finished": "[TRAINER] Servicio de entrenamiento de la IA finalizado."
+    }
+  },
+  "watchdog": {
+    "run": {
+      "process_started": "Proceso Watchdog iniciado. Enviando señal continua a prueba de fallos.",
+      "shutdown_signal": "Watchdog recibiendo señal para apagar.",
+      "loop_error": "Error en el bucle del Watchdog: {error}",
+      "process_finished": "Proceso Watchdog finalizado."
+    }
+  },
+  "warrant_evaluator": {
+    "init": {
+      "evaluator_created": "[WARRANT_EVALUATOR] Ingeniero de Análisis creado."
+    },
+    "evaluate": {
+      "diagnostics_start": "[DIAGNÓSTICO] Evaluando Intersección '{id}'. ¿Es un semáforo real? {is_real}",
+      "diagnostics_final": "[DIAGNÓSTICO FINAL] Resultado para '{id}': \n{result}"
+    },
+    "status_with_tl": "Controlado por semáforo",
+    "status_without_tl": "No señalizado (tipo: {type})",
+    "rec_remove": "QUITAR Semáforo",
+    "just_remove": "No se cumplió ningún warrant y el volumen está por debajo del umbral de eliminación.",
+    "rec_keep": "MANTENER Semáforo",
+    "just_keep": "Se cumplió al menos un warrant o el volumen es suficiente para justificar el mantenimiento.",
+    "rec_add": "AÑADIR Semáforo",
+    "just_add": "Se cumplió al menos un warrant (volumen, retraso o seguridad)."
+  },
+  "xai_worker": {
+    "run": {
+      "start": "[XAI_WORKER] Proceso del Trabajador XAI iniciado. Vigilando la carpeta: {path}",
+      "request_received": "[XAI_WORKER] Solicitud de análisis recibida para el agente: '{agent_id}'",
+      "analysis_failed": "Fallo al generar los archivos de análisis.",
+      "processing_error": "[XAI_WORKER] Error al procesar la solicitud: {error}",
+      "response_file_error": "[XAI_WORKER] Fallo crítico al escribir el archivo de respuesta: {error}",
+      "response_sent": "[XAI_WORKER] Respuesta para '{filename}' enviada.",
+      "critical_loop_error": "[XAI_WORKER] Error crítico en el bucle del vigilante: {error}",
+      "finished": "[XAI_WORKER] Proceso del Trabajador XAI finalizado."
+    }
+  },
+  "global_modes": {
+    "automatic": "Automático",
+    "semi_automatic": "Semiautomático",
+    "manual": "Manual"
+  },
+  "environment": {
+    "init": {
+      "maestro_created": "El 'Maestro' del entorno (SumoEnvironment) ha sido creado."
+    },
+    "connect": {
+      "success": "Especialistas del entorno (StateExtractor, etc.) inicializados con éxito para el escenario: {scenario}"
+    },
+    "reset": {
+      "start": "Iniciando el reinicio del entorno...",
+      "success": "Entorno reiniciado con éxito."
+    }
+  },
+  "state_extractor": {
+    "init": {
+      "sensor_created": "El 'Sensor' del entorno (StateExtractor) ha sido creado."
+    }
+  },
+  "reward_calculator": {
+    "init": {
+      "judge_created": "El 'Juez' del entorno (RewardCalculator) ha sido creado.",
+      "weights_loaded": "Pesos de recompensa cargados: {weights}"
+    }
+  },
+  "action_supervisor": {
+    "init": {
+      "actuator_created": "El 'Actuador' del entorno (ActionSupervisor) ha sido creado.",
+      "min_green_time_rule": "Regla de seguridad activada: Tiempo mínimo de verde = {time}s."
+    },
+    "reset": {
+      "success": "Supervisor de Acciones reiniciado con éxito."
+    },
+    "veto": {
+      "received": "[SUPERVISOR] Veto del Guardián recibido para el semáforo {tl_id}. La acción {action} será bloqueada."
+    },
+    "apply": {
+      "action_blocked": "[SUPERVISOR] Acción {action} bloqueada por el Guardián para el semáforo {tl_id}.",
+      "min_time_not_met": "Tiempo mínimo de verde aún no alcanzado para el semáforo {tl_id}. Acción ignorada."
+    }
+  },
+  "service_manager": {
+    "init": {
+      "created": "[SERVICE_MANAGER] Gestor de Servicios creado."
+    },
+    "start": {
+      "all": "[SERVICE_MANAGER] Iniciando todos los servicios de soporte (Guardián, XAI)...",
+      "guardian_success": " -> Trabajador del Guardián iniciado con PID: {pid}",
+      "xai_success": " -> Trabajador de XAI iniciado con PID: {pid}"
+    }
+  }
+}

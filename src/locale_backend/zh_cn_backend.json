@@ -1,0 +1,705 @@
+{
+  "action_authorizer": {
+    "reason": {
+      "child": "学习阶段 (儿童)",
+      "adult": "完全控制 (成年)",
+      "teen_peak": "青少年时期的高峰时段",
+      "teen_offpeak": "允许控制 (青少年)",
+      "unknown": "成熟度未知"
+    }
+  },
+  "actions": {
+    "change_phase": "更改阶段",
+    "keep_phase": "保持阶段",
+    "unknown": "未知 ({action})"
+  },
+  "asset_manager": {
+    "init": {
+      "created": "[ASSET_MANAGER] 资产管理器 (外观) 已创建并实例化专家。"
+    }
+  },
+  "captum_analyzer": {
+    "run": {
+      "empty_memory_warning": "[CAPTUM_ANALYZER] 代理 {agent_id} 的 XAI 内存为空。无法生成分析。",
+      "text_report_success": "[CAPTUM_ANALYZER] 文本分析已保存至: {path}",
+      "analysis_error": "[CAPTUM_ANALYZER] 生成分析失败: {error}"
+    }
+  },
+  "central_controller": {
+    "run": {
+      "simulation_ended": "模拟结束或 TraCI 连接丢失。",
+      "initial_connection_fail": "[CONTROLLER] 与 SUMO 的初始连接失败。正在终止进程。",
+      "keyboard_interrupt": "[CONTROLLER] 收到键盘中断。",
+      "fatal_error": "[CONTROLLER] 协调器出现致命错误: {error}",
+      "process_finished": "[CONTROLLER] 中央控制器进程已完成。"
+    },
+    "shutdown": {
+      "sending_signal": "正在向 AI 进程发送关闭信号...",
+      "signal_error": "无法向 AI 发送关闭信号: {error}"
+    },
+    "main_loop": {
+      "starting": "[CONTROLLER] 协调器已启动。进入主模拟循环。"
+    }
+  },
+  "childhood_analyzer": {
+    "init": {
+      "analyzer_created": "[CHILDHOOD_ANALYZER] 环境分析器已创建。"
+    },
+    "cache": {
+      "found": "[CHILDHOOD] 在以下位置找到童年期分析缓存: {path}",
+      "loading": "[CHILDHOOD] 正在从缓存加载交通概况和基线。",
+      "load_error": "[CHILDHOOD] 加载童年期分析缓存时出错: {error}",
+      "saving": "[CHILDHOOD] 正在将交通概况和基线保存到缓存。",
+      "save_error": "[CHILDHOOD] 保存童年期分析缓存时出错: {error}"
+    },
+    "run": {
+      "no_rules_warning": "[CHILDHOOD] 在设置中未找到时间规则。返回默认概况。",
+      "start": "[CHILDHOOD] '童年期' 交通分析已启动...",
+      "analyzing_episodes": "   L- 正在分析 {count} 个回合。",
+      "complete": "[CHILDHOOD] 童年期分析完成。基线平均奖励: {reward}"
+    }
+  },
+  "connection_manager": {
+    "import": {
+      "sumo_tools_path": "已添加 SUMO 工具路径: {path}",
+      "traci_loaded": "TraCI 模块已成功从以下位置加载: {path}",
+      "traci_critical_fail": "严重故障：无法导入 TraCI。请检查 'SUMO_HOME' 环境变量是否设置正确。"
+    },
+    "init": {
+      "manager_created": "[CONN_MANAGER] SUMO 连接管理器已创建。"
+    },
+    "connect": {
+      "waiting_for_sumo": "正在等待 SUMO 在端口 {port} 加载场景...",
+      "open_sumocfg_prompt": "请打开 SUMO 和您的 .sumocfg 文件。",
+      "success": "✅ 成功：已建立与 SUMO 的连接。",
+      "scenario_loaded": "   L- 场景已加载: {scenario}",
+      "fatal_error": "[CONN_MANAGER] 与 SUMO 连接时发生致命故障。"
+    },
+    "close": {
+      "closing": "[CONN_MANAGER] 正在关闭与 SUMO 的连接...",
+      "already_lost": "[CONN_MANAGER] 尝试关闭时与 SUMO 的连接已丢失。",
+      "no_connection": "[CONN_MANAGER] 没有可关闭的活动连接。"
+    }
+  },
+  "connector": {
+    "connecting": "[CONNECTOR] 正在连接到 TraCI 代理...",
+    "connection_established": "✅ [CONNECTOR] 已建立与 TraCI 代理的 '连接'。"
+  },
+  "db_manager": {
+    "init": {
+      "manager_created": "[DB_MANAGER] 数据库管理器指向: {path}",
+      "db_error": "[DB_MANAGER] 初始化数据库时出错: {error}"
+    },
+    "create_run": {
+      "success": "[DB_MANAGER] 新运行已成功注册 (场景: {scenario})。",
+      "error": "[DB_MANAGER] 创建运行记录时出错: {error}"
+    },
+    "log_episode": {
+      "error": "[DB_MANAGER] 保存回合 {episode} 的指标时出错: {error}"
+    },
+    "log_report": {
+      "error": "[DB_MANAGER] 保存分析报告时出错: {error}"
+    }
+  },
+  "db_worker": {
+    "run": {
+      "worker_started": "[DB_WORKER] 数据库工作进程已启动并准备接收数据。",
+      "shutdown_signal": "[DB_WORKER] 收到关闭信号。",
+      "unknown_log_type": "[DB_WORKER] 收到未知的日志类型: {type}",
+      "processing_error": "[DB_WORKER] 处理数据包时出错: {packet}",
+      "user_interrupt": "[DB_WORKER] 进程被用户终止。",
+      "fatal_error": "[DB_WORKER] 工作进程中发生致命且未处理的错误: {error}",
+      "worker_finished": "[DB_WORKER] 数据库工作进程已完成。"
+    }
+  },
+  "decision_orchestrator": {
+    "init": {
+      "created": "[DECISION_ORCHESTRATOR] 决策协调器已创建。"
+    }
+  },
+  "episode_runner": {
+    "init": {
+      "created": "[EPISODE_RUNNER] 回合运行器 (纯 AI 模式) 已创建。"
+    },
+    "run": {
+      "start_unified": "正在启动回合 {episode} (统一训练模式)"
+    }
+  },
+  "guardian_agent": {
+    "init": {
+      "success": "   -> [守护者] AI 大脑 (Dueling DQN) 已创建。AMP 已启用: {enabled}"
+    }
+  },
+  "health_monitor": {
+    "init": {
+      "monitor_created": "[HEALTH_MONITOR] AI 健康监视器已创建，超时时间为 {timeout} 秒。"
+    },
+    "activity": {
+      "communication_reestablished": "[HEALTH_MONITOR] 与 AI 的通信已重新建立。"
+    },
+    "health_check": {
+      "failure": "[HEALTH_MONITOR] 故障：超过 {timeout} 秒未收到 AI 的通信。",
+      "switching_to_watchdog": "[HEALTH_MONITOR] 正在向控制器发送信号以切换到故障安全模式 (Watchdog)。"
+    }
+  },
+  "heatmap_renderer": {
+    "init": {
+      "created": "[HEATMAP_RENDERER] 热图渲染器已创建。"
+    },
+    "run": {
+      "error": "[HEATMAP_RENDERER] 生成热图图像时出错: {error}"
+    }
+  },
+  "infra_analyzer": {
+    "init": {
+      "config_error": "未找到或不完整的 [INFRASTRUCTURE_ANALYSIS] 部分。"
+    },
+    "unknown_scenario": "未知场景",
+    "analyzer_created": "基础设施分析管理器已创建。",
+    "summary_first_run": "已执行首次分析。",
+    "change_new_junction": "检测到新的交叉口 {id}",
+    "change_metric": "交叉口 {id} 的 '{metric}' 变化了 {percent}%",
+    "summary_changes_detected": "检测到重大变化: {changes}",
+    "summary_no_changes": "未检测到交通指标的重大变化。"
+  },
+  "init_orchestrator": {
+    "init": {
+      "created": "[INIT_ORCHESTRATOR] 设置工程师已创建。"
+    },
+    "summary": {
+      "success": "[INIT_ORCHESTRATOR] 摘要文件 'status.json' 已成功创建于: {path}",
+      "critical_error": "[INIT_ORCHESTRATOR] 写入 'status.json' 时发生严重故障: {error}"
+    },
+    "run": {
+      "start": "[INIT_ORCHESTRATOR] 初始化协调器正在接管控制...",
+      "scenario_path_error": "无法获取 SUMO 场景路径。",
+      "assets_dashboard": "[INIT_ORCHESTRATOR] 正在命令资产管理器生成仪表盘资产...",
+      "coords_file_error": "[INIT_ORCHESTRATOR] 由于未返回地图数据，无法生成坐标文件。",
+      "assets_planning": "[INIT_ORCHESTRATOR] 正在为“规划”选项卡生成初始地图...",
+      "collecting_summary": "[INIT_ORCHESTRATOR] 正在为系统摘要收集数据 (交通灯拓扑)...",
+      "complete": "[INIT_ORCHESTRATOR] 设置阶段完成。将控制权移交给训练器。"
+    }
+  },
+  "launcher": {
+    "main": {
+      "preparing_processes": "正在准备 CARINA 系统进程...",
+      "starting_ui_process": "正在从以下位置启动 UI 进程: {path}",
+      "ui_started": " -> 用户界面 (UI) 已启动，进程 ID: {pid}",
+      "starting_backend_processes": "正在启动所有 CARINA 生态系统后端进程...",
+      "process_started_metrics": " -> {process_name} (PID: {pid}) [指标: http://localhost:{port}]",
+      "process_started_no_metrics": " -> {process_name} (PID: {pid})",
+      "system_running": "CARINA 系统已完全运行，包括前端和后端。",
+      "interrupt_received": "\n收到中断信号 (Ctrl+C)。正在关闭...",
+      "terminating_ui": "   -> 正在终止 UI 进程 (PID: {pid})...",
+      "force_killing_ui": "   -> UI 进程未及时终止。强制终止。",
+      "final_cleanup": "正在对后端进程进行最终清理...",
+      "terminating_backend_process": "   -> 正在终止进程 {name} (PID: {pid})...",
+      "system_shutdown": "系统已关闭。"
+    }
+  },
+  "learning_coordinator": {
+    "init": {
+      "created": "[LEARNER] 学习协调器已创建。"
+    },
+    "update": {
+      "trigger": "[LEARNER] 正在为代理触发学习周期。"
+    }
+  },
+  "lifecycle_manager": {
+    "init": {
+      "manager_created": "[LIFECYCLE] 生命周期管理器已创建。",
+      "checkpoint_dir_set": "[LIFECYCLE] 此场景的检查点目录设置为: '{path}'"
+    },
+    "create": {
+      "no_checkpoint_dir_error": "[LIFECYCLE] 未配置场景检查点目录。",
+      "loading_checkpoints": "[LIFECYCLE] 正在创建代理并从 '{path}' 加载检查点...",
+      "uniform_obs_size": "[LIFECYCLE] 所有代理的统一观察大小: {size}",
+      "no_dna_found": "未找到代理 {tl_id} 的初始 DNA。跳过。",
+      "creation_complete": "[LIFECYCLE] 总共创建了 {num_agents} 个代理和 {num_guardians} 个守护者。"
+    },
+    "save": {
+      "starting_checkpoint": "--- 正在开始检查点 ({reason}) 于 '{path}' ---",
+      "checkpoint_complete": "--- 检查点完成 ---"
+    }
+  },
+  "local_agent": {
+    "load": {
+      "obs_mismatch_warning": "[代理 {agent_id}] 检查点观察大小 ({chk_obs}) 与当前大小 ({cur_obs}) 不同。",
+      "success": "好的 [代理 {agent_id}] 检查点已从 '{path}' 加载。XAI 内存中有 {count} 个样本。",
+      "not_found_warning": "[代理 {agent_id}] 在 '{path}' 未找到检查点。从头开始创建代理。",
+      "error": "[代理 {agent_id}] 加载检查点时出错: {error}"
+    }
+  },
+  "main_ai": {
+    "hardware_check": {
+      "starting": "正在开始硬件诊断 (PYTORCH)...",
+      "gpu_not_found": "未检测到或不支持 CUDA",
+      "gpu_success": "✅ 成功：找到 GPU: {name}",
+      "gpu_not_found_warning": "❌ 警告：未找到与 CUDA 兼容的 GPU。"
+    },
+    "load_settings": {
+      "critical_error": "严重故障：在以下位置未找到或为空的配置文件: {path}"
+    },
+    "run": {
+      "process_started": "[MAIN_IA] AI 进程已启动并“连接”到 TraCI 代理。"
+    }
+  },
+  "map_generator": {
+    "run": {
+      "net_file_not_found": "[MapGenerator] 在以下位置未找到网络文件: {path}",
+      "netconvert_not_found": "[MapGenerator] 严重：未找到 'netconvert' 可执行文件。请检查 SUMO_HOME 环境变量。",
+      "generating_files": "[MapGenerator] 正在生成地图数据文件 (.nod.xml, .edg.xml)...",
+      "success": "[MapGenerator] 已成功生成前缀为 {prefix} 的数据文件。",
+      "files_not_found_after_run": "[MapGenerator] 已执行 'netconvert' 命令，但未找到数据文件。",
+      "netconvert_error": "执行 'netconvert' 时出错。SUMO 返回错误。",
+      "stderr_output": "错误输出 (stderr):\n{stderr}",
+      "unexpected_error": "MapGenerator 中发生意外错误: {error}"
+    }
+  },
+  "maturity_manager": {
+    "init": {
+      "manager_created": "[MATURITY_MANAGER] 驾驶学校主管已创建。",
+      "performance_target": "   L- 毕业性能目标 (基线): 奖励 > {target}"
+    },
+    "register": {
+      "agents_registered": "[MATURITY_MANAGER] {count} 个代理已在阶段 {phase} 注册。"
+    },
+    "calibration": {
+      "thresholds_updated": "[MATURITY_MANAGER] 已从校准器接收并激活成年阶段的置信度阈值。"
+    },
+    "save": {
+      "success": "[MATURITY_MANAGER] 成熟度状态已成功保存至: {path}",
+      "error": "[MATURITY_MANAGER] 保存成熟度状态时出错: {error}"
+    },
+    "load": {
+      "not_found": "[MATURITY_MANAGER] 在 '{path}' 未找到成熟度状态文件。从头开始。",
+      "success": "[MATURITY_MANAGER] 已成功从 '{path}' 加载成熟度状态。",
+      "error": "[MATURITY_MANAGER] 加载成熟度状态时出错: {error}"
+    },
+    "phase_child": "童年期",
+    "phase_teen": "青春期",
+    "phase_adult": "成年期",
+    "criterion_time": "标准：服务时间",
+    "criterion_performance": "标准：表现",
+    "criterion_confidence": "标准：置信度",
+    "time_details": "{episodes_in_phase} / {required_episodes} 回合已完成",
+    "performance_details": "平均 {mean_performance:.2f} > 目标 {baseline_target:.2f}",
+    "confidence_details": "熵 {agent_entropy:.2f} < 阈值 {entropy_threshold:.2f}",
+    "new_phase_message": "新阶段: {phase_name}",
+    "criteria_met_header": "已满足标准:",
+    "promotion_not_met_message": "未满足晋升至 {target_phase_name} 阶段的要求",
+    "criteria_status_header": "标准状态:"
+  },
+  "maturity_reporter": {
+    "promotion": {
+      "title_graduated": "已毕业",
+      "title_promoted": "已晋升",
+      "header": "🎓 {title} | 代理: {agent_id}"
+    },
+    "rejection": {
+      "title": "评估报告卡",
+      "header": "📝 {title} | 代理: {agent_id} (阶段: {current_phase_name})"
+    }
+  },
+  "network_parser": {
+    "lane_to_edge": {
+      "start": "[PARSER] 正在从 '{path}' 构建车道 -> 道路转换图...",
+      "success": "[PARSER] 转换图已成功构建。{count} 条车道已映射。",
+      "file_not_found_error": "严重错误：在 '{path}' 未找到网络文件。",
+      "processing_error": "处理网络文件以进行转换图时出错: {error}"
+    },
+    "structural_map": {
+      "start": "[PARSER] 正在从网络文件构建结构化邻域图...",
+      "reading_net_file": "   L- 正在读取网络文件: {path}",
+      "neighborhood_found": "   L- 找到 '{tl_id}' 的结构化邻域: {neighbors}",
+      "success": "[PARSER] 已成功为 {count} 个交通灯构建结构化邻域图。",
+      "file_not_found_error": "错误：在结构化解析期间未找到文件: {error}",
+      "processing_error": "处理网络文件以构建结构化邻域时出错: {error}"
+    },
+    "routes_map": {
+      "obsolete_warning": "[PARSER] 函数 'build_neighborhood_map_from_routes' 已过时，未执行。"
+    }
+  },
+  "population_manager": {
+    "init": {
+      "manager_created": "[POP_MANAGER] 种群管理器 (PBT) 已创建。",
+      "evolution_freq": "    L- 进化频率: {freq} 个回合。",
+      "exploit_percentile": "    L- 利用百分位数: 最差代理的 {percentile}%。",
+      "initializing_population": "[POP_MANAGER] 正在使用 PBT DNA 初始化代理种群...",
+      "population_created": "[POP_MANAGER] 已成功创建包含 {count} 个代理的种群。"
+    },
+    "evolve": {
+      "start_cycle": "\n--- PBT 进化周期 ---",
+      "no_scores_warning": "[PBT] 未计算代理得分。跳过进化周期。",
+      "agent_copy": "  [PBT] 代理 {worst_id} (得分: {worst_score}) 将从代理 {best_id} (得分: {best_score}) 复制 DNA",
+      "mutating_param": "    L- 正在突变 '{param}': {old_value} -> {new_value}",
+      "end_cycle": "--- 进化周期结束 ---\n"
+    }
+  },
+  "post_episode_coordinator": {
+    "init": {
+      "created": "[POST_EPISODE_COORDINATOR] 轮班管理器 (AI + DB 模式) 已创建。"
+    },
+    "run": {
+      "no_metrics_warning": "[POST_EPISODE] 未收到回合的指标。跳过任务。",
+      "db_queue_error": "[POST_EPISODE] 将指标发送到 DB 队列时失败: {error}"
+    },
+    "checkpoint": {
+      "reason_promotion": "代理晋升",
+      "reason_periodic": "回合 {episode}"
+    }
+  },
+  "report_generator": {
+    "header": {
+      "title1": "======================================================================",
+      "title2": "==      CARINA - 交通灯基础设施分析报告     ==",
+      "title3": "======================================================================"
+    },
+    "general_data": {
+      "title": "常规分析数据",
+      "scenario": "已分析场景",
+      "date": "分析日期",
+      "duration": "基础模拟持续时间"
+    },
+    "summary": {
+      "title": "建议摘要",
+      "junctions_analyzed": "已分析的相关交叉口总数",
+      "recommendations": "建议: {add} 个添加, {remove} 个移除, {keep} 个保留。"
+    },
+    "parameters": {
+      "title": "分析中使用的参数",
+      "min_vol_primary": "最小车流量 (主路)",
+      "min_vol_secondary": "最小车流量 (辅路)",
+      "unacceptable_delay": "不可接受的平均延迟",
+      "conflict_threshold": "冲突事件阈值",
+      "removal_threshold": "移除阈值 (占车流量百分比)"
+    },
+    "detailed_rec": {
+      "title1": "======================================================================",
+      "title2": "==                 按交叉口的详细建议               ==",
+      "title3": "======================================================================"
+    },
+    "junction": {
+      "title": "交叉口 ID: {id}",
+      "recommendation": "最终建议",
+      "current_status": "当前情况",
+      "justification": "主要理由",
+      "warrants_analysis": "权证分析",
+      "warrant_satisfied": "满足",
+      "warrant_not_satisfied": "不满足",
+      "warrant1_volume": "权证 1 (车流量)",
+      "warrant2_delay": "权证 2 (延迟)",
+      "warrant4_safety": "权证 4 (安全)",
+      "observed_data": "观测数据",
+      "volume_primary_keep": "车流量 (主路):     {value} 辆/小时 (需要 > {threshold} 才能保留)",
+      "volume_primary": "车流量 (主路):     {value} 辆/小时 (阈值: {threshold})",
+      "volume_secondary": "车流量 (辅路):    {value} 辆/小时 (阈值: {threshold})",
+      "avg_delay": "辅路平均延迟: {value} 秒 (阈值: {threshold})",
+      "conflict_events": "冲突事件:        {value} 次 (阈值: {threshold})"
+    },
+    "footer": {
+      "title1": "======================================================================",
+      "title2": "==                         报告结束                            ==",
+      "title3": "======================================================================",
+      "generated_by": "生成者: CARINA - 受控人工智能道路交通智能网络架构"
+    }
+  },
+  "reporter": {
+    "creation": {
+      "agent_created": "   -> [创建] 为交通灯 ID '{tl_id}' 创建了本地代理 (PPO) 和守护代理 (DQN)。",
+      "amp_status": "      L- 混合精度训练 (AMP) 已启用: {enabled}"
+    },
+    "graph": {
+      "title": "网络拓扑分析完成",
+      "nodes": "  - 交通灯总数 (节点): {count}",
+      "edges": "  - 连接总数 (边): {count}"
+    },
+    "step_header": "\n--- {message} ---",
+    "step_start": "模拟步骤 {step} (时间: {sim_time}秒)",
+    "step_mode": "[全局控制] 当前操作模式: {mode}",
+    "agent_suggestion": "[🧠 代理 {tl_id} | {maturity_level}] 建议: {action_str}",
+    "status_approved": "已批准",
+    "status_denied": "已拒绝",
+    "system_decision": "    -> [系统] 决定: {status} ({reason})",
+    "bulletin_header": "回合 {episode_count} 结束 | 学校公告",
+    "bulletin_performance": "  - 回合性能: 总奖励 = {total_reward}",
+    "bulletin_class_status": "  - 班级状态: {adults} 个成年 | {teens} 个青少年 | {children} 个儿童",
+    "bulletin_calibration_status": "  - 置信度校准状态: {status}",
+    "calib_status_done": "已完成",
+    "calib_status_ongoing": "进行中",
+    "override_suffix_alert": " - 警示模式",
+    "override_suffix_off": " - 已停用"
+  },
+  "request_processor": {
+    "init": {
+      "processor_created": "[REQ_PROCESSOR] 请求处理器 (调度模式) 已创建。"
+    },
+    "ui_command": {
+      "received": "[REQ_PROCESSOR] 收到 UI 命令: 类型={type}",
+      "processing_save": "-> 正在处理 'save_settings' 命令...",
+      "save_success": "-> SettingsManager 已成功保存设置。",
+      "processing_error": "[REQ_PROCESSOR] 处理 UI 命令时出错: {error}"
+    },
+    "batch_collect": {
+      "error": "[REQ_PROCESSOR] 批量数据收集期间出错: {error}"
+    },
+    "ai_request": {
+      "queue_full_warning": "[REQ_PROCESSOR] 服务队列之一 (SDS/SAS) 已满。",
+      "processing_error": "[REQ_PROCESSOR] 处理 AI 请求时出错: {error}"
+    },
+    "watchdog": {
+      "processing_error": "[REQ_PROCESSOR] 处理 Watchdog 命令时出错: {error}"
+    },
+    "override": {
+      "ai_ignored": "[全局控制] AI 对 '{tl_id}' 的建议被忽略。交通灯正由操作员干预 (状态: {state})。",
+      "manual_intervention": "[手动干预] 用户已将交通灯 '{semaphore_id}' 设置为 '{state}' 模式。"
+    }
+  },
+  "sas_collector": {
+    "init": {
+      "collector_created": "[SAS_COLLECTOR] 分析数据收集器已创建。"
+    },
+    "reset": {
+      "data_reset": "[SAS_COLLECTOR] 累积数据已为下一个周期重置。"
+    },
+    "get_data": {
+      "data_processed": "[SAS_COLLECTOR] 累积数据已处理并准备好进行分析。"
+    }
+  },
+  "sas_engine": {
+    "init": {
+      "engine_created": "[SAS_ENGINE] 分析引擎 (模式 +DB) 已创建。"
+    },
+    "run": {
+      "analysis_skipped_no_data": "[SAS_ENGINE] 由于模拟持续时间或网络文件路径无效，跳过分析。",
+      "report_sent_to_db": "[SAS_ENGINE] 分析报告已发送到 DB 队列。",
+      "db_queue_error": "[SAS_ENGINE] 将报告发送到 DB 队列时失败: {error}",
+      "analysis_complete": "[SAS_ENGINE] 分析运行完成。",
+      "processing_data": "[SAS_ENGINE] 正在处理累积的模拟数据...",
+      "data_processed": "[SAS_ENGINE] 已为 {count} 个交叉口处理数据。"
+    },
+    "map": {
+      "generating": "[SAS_ENGINE] 正在生成带有建议图标的新规划地图..."
+    },
+    "topology": {
+      "critical_error": "[SAS_ENGINE] 构建网络拓扑时发生严重错误: {error}",
+      "cannot_continue_error": "[SAS_ENGINE] 无法创建网络拓扑。分析无法继续。"
+    },
+    "cache": {
+      "save_error": "[SAS_ENGINE] 保存缓存文件时出错。"
+    },
+    "ui": {
+      "status_save_error": "[SAS_ENGINE] 保存 UI 状态文件时出错。"
+    }
+  },
+  "sas_orchestrator": {
+    "init": {
+      "analysis_frequency_set": "[SAS_ORCH] 分析频率设置为每 {freq} 秒模拟一次。",
+      "config_error": "[SAS_ORCH] 未找到 [INFRASTRUCTURE_ANALYSIS] 部分或时间键。使用默认值。",
+      "orchestrator_created": "[SAS_ORCH] SAS 协调器已创建并实例化专家。"
+    },
+    "run": {
+      "main_loop_start": "[SAS_ORCH] 进入主收集和分析循环。",
+      "run_id_captured": "[SAS_ORCH] 为此分析周期捕获了 RUN_ID: {run_id}。",
+      "analysis_triggered": "[SAS_ORCH] 在 {time} 秒时达到分析触发器。开始分析...",
+      "analysis_skipped_no_run_id": "[SAS_ORCH] 由于尚未收到有效的 RUN_ID，跳过分析。",
+      "analysis_cycle_complete": "[SAS_ORCH] 分析周期完成。收集器已重置。",
+      "interrupt_received": "[SAS_ORCH] 收到中断信号。关闭协调器。",
+      "fatal_error": "[SAS_ORCH] 协调器循环中发生致命错误: {error}",
+      "orchestrator_shutdown": "[SAS_ORCH] SAS 协调器已关闭。"
+    }
+  },
+  "sas_worker": {
+    "run": {
+      "user_interrupt": "[SAS_WORKER] SAS 进程被用户终止。",
+      "fatal_error": "[SAS_WORKER] SAS 工作进程中发生致命且未处理的错误: {error}",
+      "worker_finished": "[SAS_WORKER] SAS 工作进程已完成。"
+    }
+  },
+  "sds_processor": {
+    "init": {
+      "processor_created": "[SDS_PROCESSOR] 数据处理器 (画布/JSON 模式) 已创建。"
+    }
+  },
+  "sds_orchestrator": {
+    "init": {
+      "orchestrator_created": "[SDS_ORCH] SDS 协调器已创建并实例化专家。"
+    },
+    "run": {
+      "ws_thread_started": "[SDS_ORCH] WebSocket 服务器线程已启动。",
+      "main_loop_start": "[SDS_ORCH] 进入主数据处理循环。",
+      "interrupt_received": "[SDS_ORCH] 收到中断信号。关闭协调器。",
+      "fatal_error": "[SDS_ORCH] 协调器循环中发生致命错误: {error}",
+      "orchestrator_finished": "[SDS_ORCH] SDS 协调器已完成。"
+    }
+  },
+  "sds_websocket": {
+    "register": {
+      "client_connected": "[SDS_WS] 新客户端已连接: {address}"
+    },
+    "unregister": {
+      "client_disconnected": "[SDS_WS] 客户端 {address} 已断开连接。"
+    },
+    "handler": {
+      "command_received": "[SDS_WS] 收到来自 UI 的命令: {command}",
+      "invalid_json": "[SDS_WS] 收到来自 {address} 的无效 (非 JSON) 消息",
+      "queue_full": "[SDS_WS] UI 命令队列已满。UI 命令已被丢弃。"
+    },
+    "main_loop": {
+      "server_started": "[SDS_WS] SDS WebSocket 服务器已在 ws://{host}:{port} 启动"
+    }
+  },
+  "sds_worker": {
+    "run": {
+      "user_interrupt": "[SDS_WORKER] SDS 进程被用户终止。",
+      "fatal_error": "[SDS_WORKER] SDS 工作进程中发生致命且未处理的错误: {error}",
+      "worker_finished": "[SDS_WORKER] SDS 工作进程已完成。"
+    }
+  },
+  "static_map_renderer": {
+    "init": {
+      "created": "[STATIC_MAP_RENDERER] 静态地图渲染器已创建。"
+    },
+    "run": {
+      "rendering_map": "[STATIC_MAP_RENDERER] 正在将高分辨率地图渲染到: {path}",
+      "render_complete": "[STATIC_MAP_RENDERER] 地图渲染完成: {filename}",
+      "critical_error_icons": "[STATIC_MAP_RENDERER] 生成带图标的地图时发生严重错误: {error}",
+      "critical_error_coords": "[STATIC_MAP_RENDERER] 生成坐标文件时出错: {error}"
+    }
+  },
+  "strategic_coordinator": {
+    "init": {
+      "created": "[STRATEGIC_COORD] 战略协调器 (GAT) 已创建。"
+    },
+    "initialize": {
+      "start": "[STRATEGIC_COORD] 正在初始化战略子系统...",
+      "max_state_dim": "[STRATEGIC_COORD] 最大局部状态维度 (用于填充): {size}",
+      "model_created": "[STRATEGIC_COORD] GAT 策略模型已创建并移动到设备: {device}。"
+    }
+  },
+  "threshold_calibrator": {
+    "init": {
+      "created": "[THRESHOLD_CALIBRATOR] 置信度校准器已创建。",
+      "window_info": "   L- 将在 {window} 个回合的窗口内监控稳定性。"
+    },
+    "step": {
+      "collecting_data": "[CALIBRATOR] 正在收集熵数据... ({current}/{total})",
+      "std_dev_check": "[CALIBRATOR] 当前熵的标准差: {std_dev} (阈值: {threshold})"
+    },
+    "calibrate": {
+      "plateau_detected": "[THRESHOLD_CALIBRATOR] 检测到熵平台！置信度学习曲线已稳定。",
+      "stable_value": "   L- 计算出的稳定熵值: {value}",
+      "complete": "[THRESHOLD_CALIBRATOR] 校准完成！",
+      "teen_threshold": "   L- 青少年阶段的阈值设置为：熵 < {threshold}",
+      "adult_threshold": "   L- 成年阶段的阈值设置为：熵 < {threshold}"
+    }
+  },
+  "trainer": {
+    "shutdown": {
+      "signal_received": "[TRAINER] 收到来自 CentralController 的平稳关闭信号。",
+      "connection_lost": "[TRAINER] 与 CentralController 的连接已丢失。正在启动关闭。",
+      "reason": "关闭"
+    },
+    "run": {
+      "new_run_id": "--- 新运行已注册，运行 ID: {run_id} ---",
+      "db_error": "无法在数据库中创建运行记录。正在中止。",
+      "cache_not_found": "[TRAINER] 未找到分析缓存。正在运行分析阶段..."
+    },
+    "main": {
+      "keyboard_interrupt": "\n[TRAINER] 检测到键盘中断。正在关闭...",
+      "fatal_error": "训练器循环中发生致命错误: {error}",
+      "final_checkpoint": "正在关闭前保存最终 AI 状态...",
+      "service_finished": "[TRAINER] AI 训练服务已完成。"
+    }
+  },
+  "watchdog": {
+    "run": {
+      "process_started": "Watchdog 进程已启动。正在发送连续的故障安全信号。",
+      "shutdown_signal": "Watchdog 收到关闭信号。",
+      "loop_error": "Watchdog 循环中出错: {error}",
+      "process_finished": "Watchdog 进程已完成。"
+    }
+  },
+  "warrant_evaluator": {
+    "init": {
+      "evaluator_created": "[WARRANT_EVALUATOR] 分析工程师已创建。"
+    },
+    "evaluate": {
+      "diagnostics_start": "[DIAGNOSTICS] 正在评估交叉口 '{id}'。这是一个真实的交通灯吗？ {is_real}",
+      "diagnostics_final": "[最终诊断] '{id}' 的结果: \n{result}"
+    },
+    "status_with_tl": "由交通灯控制",
+    "status_without_tl": "无信号 (类型: {type})",
+    "rec_remove": "移除交通灯",
+    "just_remove": "未满足任何权证，且车流量低于移除阈值。",
+    "rec_keep": "保留交通灯",
+    "just_keep": "至少满足一个权证，或车流量足以证明保留。",
+    "rec_add": "添加交通灯",
+    "just_add": "至少满足一个权证 (车流量、延迟或安全)。"
+  },
+  "xai_worker": {
+    "run": {
+      "start": "[XAI_WORKER] XAI 工作进程已启动。正在监视文件夹: {path}",
+      "request_received": "[XAI_WORKER] 收到对代理 '{agent_id}' 的分析请求",
+      "analysis_failed": "生成分析文件失败。",
+      "processing_error": "[XAI_WORKER] 处理请求时出错: {error}",
+      "response_file_error": "[XAI_WORKER] 写入响应文件时发生严重故障: {error}",
+      "response_sent": "[XAI_WORKER] 已发送对 '{filename}' 的响应。",
+      "critical_loop_error": "[XAI_WORKER] 监视循环中发生严重错误: {error}",
+      "finished": "[XAI_WORKER] XAI 工作进程已完成。"
+    }
+  },
+  "global_modes": {
+    "automatic": "自动",
+    "semi_automatic": "半自动",
+    "manual": "手动"
+  },
+  "environment": {
+    "init": {
+      "maestro_created": "已创建环境“大师”(SumoEnvironment)。"
+    },
+    "connect": {
+      "success": "环境专家 (StateExtractor 等) 已成功为场景 {scenario} 初始化。"
+    },
+    "reset": {
+      "start": "正在启动环境重置...",
+      "success": "环境已成功重置。"
+    }
+  },
+  "state_extractor": {
+    "init": {
+      "sensor_created": "已创建环境“传感器”(StateExtractor)。"
+    }
+  },
+  "reward_calculator": {
+    "init": {
+      "judge_created": "已创建环境“裁判”(RewardCalculator)。"
+    },
+    "weights_loaded": "奖励权重已加载: {weights}"
+  },
+  "action_supervisor": {
+    "init": {
+      "actuator_created": "已创建环境“执行器”(ActionSupervisor)。"
+    },
+    "reset": {
+      "success": "动作监督器已成功重置。"
+    },
+    "veto": {
+      "received": "[监督器] 收到守护者对交通灯 {tl_id} 的否决。动作 {action} 将被阻止。"
+    },
+    "apply": {
+      "action_blocked": "[监督器] 动作 {action} 被守护者阻止，用于交通灯 {tl_id}。",
+      "min_time_not_met": "交通灯 {tl_id} 的最小绿灯时间尚未满足。动作被忽略。"
+    }
+  },
+  "service_manager": {
+    "init": {
+      "created": "[SERVICE_MANAGER] 服务管理器已创建。"
+    },
+    "start": {
+      "all": "[SERVICE_MANAGER] 正在启动所有支持服务 (守护者, XAI)...",
+      "guardian_success": " -> 守护者工作进程已启动，进程 ID: {pid}",
+      "xai_success": " -> XAI 工作进程已启动，进程 ID: {pid}"
+    }
+  }
+}

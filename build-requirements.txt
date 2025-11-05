@@ -1,0 +1,21 @@
+# Dependências principais do CARINA (limpas do requirements.txt e carina.spec)
+flet
+websockets==10.4
+prometheus_client
+psutil
+numpy==1.26.4
+pandas
+scipy
+scikit-learn
+matplotlib
+captum
+torch
+torch_geometric
+xxhash
+pillow==10.2.0
+
+# Adicionado para corrigir erro do PyInstaller (que vimos no Docker)
+tensorboard
+
+# Dependência de Build (útil ter localmente)
+pyinstaller

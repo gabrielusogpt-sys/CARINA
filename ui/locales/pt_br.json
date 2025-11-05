@@ -1,0 +1,167 @@
+{
+  "main_ui": {
+    "app_title": "CARINA - Painel de Controle",
+    "app_long_title": "CARINA - Controlled Artificial Road-traffic Intelligence Network Architecture",
+    "settings_tooltip": "Abrir Configurações",
+    "tab_dashboard": "Dashboard Operacional",
+    "tab_planning": "Planejamento e Otimização",
+    "tab_diagnostics": "Diagnóstico e Sistema"
+  },
+  "dashboard_view": {
+    "global_controls_title": "Controle Global",
+    "mode_auto": "Automático",
+    "mode_semiauto": "Semi-Automático",
+    "mode_manual": "Manual",
+    "street_info_title_prefix": "Detalhes da Rua:",
+    "street_congestion": "Congestionamento:",
+    "street_flow": "Fluxo (veículos/min):",
+    "street_speed": "Velocidade Média:",
+    "street_vehicles": "Nº de Veículos:",
+    "semaphore_controls_title_prefix": "Controles para:",
+    "maturity_phase_label": "Fase de Maturidade:",
+    "lane_states_title": "Estado das Vias:",
+    "green_time": "Tempo de Verde (s)",
+    "yellow_time": "Tempo de Amarelo (s)",
+    "action_alert": "Colocar em Alerta",
+    "action_deactivate": "Desativar Semáforo",
+    "save_timings_button": "Salvar Tempos",
+    "close_panel_tooltip": "Fechar painel",
+    "snackbar_manual_control_denied": "Semáforo {id} (Fase: {phase}) não pode ser controlado manualmente."
+  },
+  "planning_view": {
+    "analyze_button": "Analisar Infraestrutura",
+    "analyze_tooltip": "Carrega o último relatório de infraestrutura gerado pelo sistema",
+    "generate_report_button": "Gerar Relatório .txt",
+    "status_ready": "Pronto para carregar a última análise.",
+    "status_loading": "A procurar pelo último relatório...",
+    "status_loaded_no_change": "Análise carregada. Nenhuma mudança significativa encontrada.",
+    "status_loaded_with_change": "Análise carregada. Foram detectadas mudanças.",
+    "status_report_saved": "Relatório salvo. Pronto para carregar a próxima análise.",
+    "status_save_cancelled": "Operação de salvar cancelada.",
+    "file_picker_title": "Salvar Relatório CARINA",
+    "snackbar_report_saved": "Relatório salvo com sucesso em: {path}",
+    "dialog_no_change_title": "Análise Concluída",
+    "dialog_no_change_content": "Não houve mudança significativa desde o último relatório. Deseja gerar o arquivo .txt mesmo assim?",
+    "dialog_confirm_button": "Sim, Gerar Relatório",
+    "map_error_title": "Nenhum Mapa de Planejamento Encontrado",
+    "map_error_subtitle": "Verifique se o processo do CARINA (back-end) está em execução...",
+    "legend_existing": "Semáforo Existente / Manter",
+    "legend_add": "Adicionar Semáforo",
+    "legend_remove": "Remover Semáforo"
+  },
+  "diagnostics_view": {
+    "nav_logs": "Log em Tempo Real",
+    "nav_xai": "Análise de Decisão (XAI)",
+    "nav_system": "Sumário do Sistema",
+    "log_viewer_title": "Log em Tempo Real",
+    "log_pause": "Pausar Log",
+    "log_resume": "Continuar",
+    "log_clear": "Limpar Log",
+    "log_watching_file": "✅ Vigiando ficheiro: {file_path}",
+    "log_searching": "🟠 Procurando ficheiro de log do CARINA...",
+    "log_new_detected": "🟡 Novo ficheiro de log detetado. Reiniciando vigilância...",
+    "log_read_error": "❌ Erro ao ler o ficheiro de log: {error}",
+    "xai_title": "Análise de Decisão (XAI)",
+    "xai_dropdown_label": "Selecione o Agente para Análise",
+    "xai_dropdown_hint_select": "Selecione um agente",
+    "xai_dropdown_hint_no_scenario": "Nenhum cenário de resultados encontrado",
+    "xai_button": "Iniciar Análise de Decisão",
+    "xai_status_ready": "Selecione um agente e inicie a análise.",
+    "xai_status_loading": "Pedido enviado. Aguardando o back-end processar a análise...",
+    "xai_error_no_agent": "Por favor, selecione um agente."
+  },
+  "system_status_view": {
+    "hardware_title": "Hardware",
+    "gpu_label": "GPU Detectada:",
+    "topology_title": "Topologia da Rede (SUMO)",
+    "nodes_label": "Semáforos (Nós):",
+    "edges_label": "Conexões (Arestas):",
+    "ai_title": "População de IA",
+    "local_agents_label": "Agentes Locais (PPO):",
+    "guardian_agents_label": "Agentes Guardiões (DQN):",
+    "last_updated_label": "Última atualização:",
+    "status_file_not_found": "Ficheiro status.json não encontrado.",
+    "status_file_error": "Erro ao ler status.json: {error}"
+  },
+  "settings_view": {
+    "title": "Configurações do Sistema",
+    "tab_general": "Gerais",
+    "tab_advanced": "Avançado (IA)",
+    "save_button": "Salvar Alterações",
+    "restore_button": "Restaurar Padrões",
+    "warning_text": "Atenção: Alterar estes valores pode impactar a performance e estabilidade da IA.",
+    "general_card_title": "Geral e Aparência",
+    "dark_mode_label": "Modo Escuro",
+    "language_label": "Idioma da Interface",
+    "traffic_rules_card": {
+      "title": "Regras de Trânsito",
+      "min_green_time": "Tempo Mínimo de Fase Verde (s)",
+      "yellow_time": "Duração da Fase Amarela (s)"
+    },
+    "dashboard_card": {
+      "title": "Dashboard e Diagnóstico",
+      "heatmap_strategy": "Estratégia de Agregação do Heatmap",
+      "heatmap_saturation": "Limite de Saturação do Heatmap"
+    },
+    "advanced_ppo_card": {
+      "title": "Agente Local (PPO)",
+      "performance_margin": "Margem de Performance para Graduação (%)",
+      "gamma": "Fator de Desconto (Gamma)",
+      "k_epochs": "Épocas de Treino (K-epochs)",
+      "eps_clip": "Limite de Clipping (Epsilon)"
+    },
+    "advanced_dqn_card": {
+      "title": "Agente Guardião (DQN)",
+      "epsilon_decay": "Decaimento do Epsilon (Passos)",
+      "batch_size": "Tamanho do Lote (Batch Size)"
+    },
+    "piloting_school_card": {
+      "title": "Escola de Pilotagem (Regras de Promoção)",
+      "child_phase_duration": "Duração Mínima - Fase Criança (Episódios)",
+      "child_promotion_entropy": "Entropia Máx. para Promoção (Criança -> Adolescente)",
+      "teen_phase_duration": "Duração Mínima - Fase Adolescente (Episódios)",
+      "performance_window": "Janela de Avaliação de Performance (Episódios)",
+      "calibration_window": "Janela de Calibração de Confiança (Episódios)"
+    },
+    "reward_weights_card": {
+      "title": "Sistema de Recompensas (Personalidade da IA)",
+      "description": "Ajuste os objetivos da IA. Valores negativos são punições, valores positivos são recompensas.",
+      "waiting_time_label": "Peso: Tempo de Espera",
+      "waiting_time_tooltip": "Valor negativo. Quanto menor, mais a IA tentará evitar filas.",
+      "flow_label": "Peso: Fluxo de Veículos",
+      "flow_tooltip": "Valor positivo. Quanto maior, mais a IA priorizará mover veículos.",
+      "emergency_brake_label": "Penalidade: Frenagem de Emergência",
+      "emergency_brake_tooltip": "Penalidade por criar situações de risco. Deve ser um valor negativo alto.",
+      "teleport_label": "Penalidade: Congestionamento Extremo (Teleportes)",
+      "teleport_tooltip": "Penalidade máxima por travar o trânsito. Deve ser o maior valor negativo."
+    },
+    "advanced_system_card": {
+      "title": "Treinamento (PBT) e Sistema",
+      "pbt_frequency": "Frequência de Evolução (Episódios)",
+      "pbt_exploitation": "Percentil de Exploração (%)",
+      "watchdog_grace": "Período de Tolerância do Watchdog (s)",
+      "infra_analysis_freq": "Frequência da Análise de Infraestrutura (dias)"
+    }
+  },
+  "dialogs": {
+    "confirm_button": "Sim, Confirmar",
+    "cancel_button": "Cancelar",
+    "close_button": "Fechar",
+    "attention_title": "Atenção!",
+    "confirm_action_title": "Confirmar Ação",
+    "change_mode_content": "Mudar o sistema para o modo {mode_name} é uma ação de grande impacto.\n\nVocê tem certeza que deseja continuar?",
+    "language_change_title": "Confirmar Mudança de Idioma",
+    "language_change_content": "A aplicação precisa ser recarregada para aplicar o novo idioma. Deseja continuar?",
+    "save_settings_content": "As alterações serão salvas e podem afetar o comportamento do sistema. Deseja continuar?",
+    "specific_action_alert": "ativar o modo 'Alerta' para o semáforo {id}",
+    "specific_action_off": "desativar o semáforo {id}",
+    "specific_action_normal": "retornar o semáforo {id} à operação normal",
+    "confirm_specific_action_content": "Tem certeza que deseja {action_text}?"
+  },
+  "maturity_phases": {
+    "CHILD": "Infância",
+    "TEEN": "Adolescência",
+    "ADULT": "Adulto",
+    "UNKNOWN": "Desconhecida"
+  }
+}

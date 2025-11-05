@@ -1,0 +1,167 @@
+{
+  "main_ui": {
+    "app_title": "CARINA - Panneau de Contrôle",
+    "app_long_title": "CARINA - Controlled Artificial Road-traffic Intelligence Network Architecture",
+    "settings_tooltip": "Ouvrir les Paramètres",
+    "tab_dashboard": "Tableau de Bord Opérationnel",
+    "tab_planning": "Planification et Optimisation",
+    "tab_diagnostics": "Diagnostic et Système"
+  },
+  "dashboard_view": {
+    "global_controls_title": "Contrôle Global",
+    "mode_auto": "Automatique",
+    "mode_semiauto": "Semi-Automatique",
+    "mode_manual": "Manuel",
+    "street_info_title_prefix": "Détails de la Rue :",
+    "street_congestion": "Congestion :",
+    "street_flow": "Flux (véhicules/min) :",
+    "street_speed": "Vitesse Moyenne :",
+    "street_vehicles": "Nº de Véhicules :",
+    "semaphore_controls_title_prefix": "Contrôles pour :",
+    "maturity_phase_label": "Phase de Maturité :",
+    "lane_states_title": "État des Voies :",
+    "green_time": "Temps de Feu Vert (s)",
+    "yellow_time": "Temps de Feu Jaune (s)",
+    "action_alert": "Mettre en Alerte",
+    "action_deactivate": "Désactiver le Feu",
+    "save_timings_button": "Enregistrer les Temps",
+    "close_panel_tooltip": "Fermer le panneau",
+    "snackbar_manual_control_denied": "Le feu {id} (Phase : {phase}) ne peut pas être contrôlé manuellement."
+  },
+  "planning_view": {
+    "analyze_button": "Analyser l'Infrastructure",
+    "analyze_tooltip": "Charge le dernier rapport d'infrastructure généré par le système",
+    "generate_report_button": "Générer le Rapport .txt",
+    "status_ready": "Prêt à charger la dernière analyse.",
+    "status_loading": "Recherche du dernier rapport...",
+    "status_loaded_no_change": "Analyse chargée. Aucun changement significatif détecté.",
+    "status_loaded_with_change": "Analyse chargée. Des changements significatifs ont été détectés.",
+    "status_report_saved": "Rapport enregistré. Prêt à charger la prochaine analyse.",
+    "status_save_cancelled": "Opération de sauvegarde annulée.",
+    "file_picker_title": "Sauvegarder le Rapport CARINA",
+    "snackbar_report_saved": "Rapport sauvegardé avec succès dans : {path}",
+    "dialog_no_change_title": "Analyse Terminée",
+    "dialog_no_change_content": "Aucun changement significatif depuis le dernier rapport. Voulez-vous quand même générer le fichier .txt ?",
+    "dialog_confirm_button": "Oui, Générer le Rapport",
+    "map_error_title": "Aucune Carte de Planification Trouvée",
+    "map_error_subtitle": "Veuillez vérifier que le processus backend de CARINA est en cours d'exécution...",
+    "legend_existing": "Feu Existant / Maintenir",
+    "legend_add": "Ajouter un Feu",
+    "legend_remove": "Supprimer le Feu"
+  },
+  "diagnostics_view": {
+    "nav_logs": "Journal en Temps Réel",
+    "nav_xai": "Analyse de Décision (XAI)",
+    "nav_system": "Résumé du Système",
+    "log_viewer_title": "Journal en Temps Réel",
+    "log_pause": "Mettre en Pause",
+    "log_resume": "Reprendre",
+    "log_clear": "Effacer le Journal",
+    "log_watching_file": "✅ Surveillance du fichier : {file_path}",
+    "log_searching": "🟠 Recherche du fichier journal de CARINA...",
+    "log_new_detected": "🟡 Nouveau fichier journal détecté. Redémarrage de la surveillance...",
+    "log_read_error": "❌ Erreur de lecture du fichier journal : {error}",
+    "xai_title": "Analyse de Décision (XAI)",
+    "xai_dropdown_label": "Sélectionner l'Agent pour l'Analyse",
+    "xai_dropdown_hint_select": "Sélectionnez un agent",
+    "xai_dropdown_hint_no_scenario": "Aucun scénario de résultats trouvé",
+    "xai_button": "Démarrer l'Analyse de Décision",
+    "xai_status_ready": "Sélectionnez un agent et démarrez l'analyse.",
+    "xai_status_loading": "Requête envoyée. En attente du traitement de l'analyse par le backend...",
+    "xai_error_no_agent": "Veuillez sélectionner un agent."
+  },
+  "system_status_view": {
+    "hardware_title": "Matériel",
+    "gpu_label": "GPU Détecté :",
+    "topology_title": "Topologie du Réseau (SUMO)",
+    "nodes_label": "Feux de Signalisation (Nœuds) :",
+    "edges_label": "Connexions (Arêtes) :",
+    "ai_title": "Population d'IA",
+    "local_agents_label": "Agents Locaux (PPO) :",
+    "guardian_agents_label": "Agents Gardiens (DQN) :",
+    "last_updated_label": "Dernière mise à jour :",
+    "status_file_not_found": "Fichier status.json non trouvé.",
+    "status_file_error": "Erreur de lecture de status.json : {error}"
+  },
+  "settings_view": {
+    "title": "Paramètres du Système",
+    "tab_general": "Général",
+    "tab_advanced": "Avancé (IA)",
+    "save_button": "Enregistrer les Modifications",
+    "restore_button": "Restaurer les Paramètres par Défaut",
+    "warning_text": "Attention : La modification de ces valeurs peut impacter la performance et la stabilité de l'IA.",
+    "general_card_title": "Général et Apparence",
+    "dark_mode_label": "Mode Sombre",
+    "language_label": "Langue de l'Interface",
+    "traffic_rules_card": {
+      "title": "Règles de Circulation",
+      "min_green_time": "Temps Minimum de Phase Verte (s)",
+      "yellow_time": "Durée de la Phase Jaune (s)"
+    },
+    "dashboard_card": {
+      "title": "Tableau de Bord et Diagnostic",
+      "heatmap_strategy": "Stratégie d'Agrégation de la Carte de Chaleur",
+      "heatmap_saturation": "Seuil de Saturation de la Carte de Chaleur"
+    },
+    "advanced_ppo_card": {
+      "title": "Agent Local (PPO)",
+      "performance_margin": "Marge de Performance pour la Promotion (%)",
+      "gamma": "Facteur d'Actualisation (Gamma)",
+      "k_epochs": "Époques d'Entraînement (K-epochs)",
+      "eps_clip": "Limite de Clipping (Epsilon)"
+    },
+    "advanced_dqn_card": {
+      "title": "Agent Gardien (DQN)",
+      "epsilon_decay": "Décroissance d'Epsilon (Étapes)",
+      "batch_size": "Taille du Lot (Batch Size)"
+    },
+    "piloting_school_card": {
+      "title": "École de Pilotage (Règles de Promotion)",
+      "child_phase_duration": "Durée Minimale - Phase Enfant (Épisodes)",
+      "child_promotion_entropy": "Entropie Max. pour Promotion (Enfant -> Ado)",
+      "teen_phase_duration": "Durée Minimale - Phase Ado (Épisodes)",
+      "performance_window": "Fenêtre d'Évaluation de Performance (Épisodes)",
+      "calibration_window": "Fenêtre de Calibration de Confiance (Épisodes)"
+    },
+    "reward_weights_card": {
+      "title": "Système de Récompense (Personnalité de l'IA)",
+      "description": "Ajustez les objectifs de l'IA. Les valeurs négatives sont des pénalités, les positives des récompenses.",
+      "waiting_time_label": "Poids : Temps d'Attente",
+      "waiting_time_tooltip": "Valeur négative. Plus elle est basse, plus l'IA essaiera d'éviter les files d'attente.",
+      "flow_label": "Poids : Flux de Véhicules",
+      "flow_tooltip": "Valeur positive. Plus elle est élevée, plus l'IA priorisera le déplacement des véhicules.",
+      "emergency_brake_label": "Pénalité : Freinage d'Urgence",
+      "emergency_brake_tooltip": "Pénalité pour la création de situations à risque. Doit être une valeur négative élevée.",
+      "teleport_label": "Pénalité : Congestion Extrême (Téléportations)",
+      "teleport_tooltip": "Pénalité maximale pour le blocage du trafic. Doit être la valeur négative la plus élevée."
+    },
+    "advanced_system_card": {
+      "title": "Entraînement (PBT) et Système",
+      "pbt_frequency": "Fréquence d'Évolution (Épisodes)",
+      "pbt_exploitation": "Percentile d'Exploitation (%)",
+      "watchdog_grace": "Période de Grâce du Watchdog (s)",
+      "infra_analysis_freq": "Fréquence de l'Analyse d'Infrastructure (jours)"
+    }
+  },
+  "dialogs": {
+    "confirm_button": "Oui, Confirmer",
+    "cancel_button": "Annuler",
+    "close_button": "Fermer",
+    "attention_title": "Attention !",
+    "confirm_action_title": "Confirmer l'Action",
+    "change_mode_content": "Changer le système en mode {mode_name} est une action à fort impact.\n\nÊtes-vous sûr de vouloir continuer ?",
+    "language_change_title": "Confirmer le Changement de Langue",
+    "language_change_content": "L'application doit être rechargée pour appliquer la nouvelle langue. Voulez-vous continuer ?",
+    "save_settings_content": "Les modifications seront enregistrées et peuvent affecter le comportement du système. Voulez-vous continuer ?",
+    "specific_action_alert": "activer le mode 'Alerte' pour le feu {id}",
+    "specific_action_off": "désactiver le feu {id}",
+    "specific_action_normal": "rétablir le fonctionnement normal du feu {id}",
+    "confirm_specific_action_content": "Êtes-vous sûr de vouloir {action_text} ?"
+  },
+  "maturity_phases": {
+    "CHILD": "Enfance",
+    "TEEN": "Adolescence",
+    "ADULT": "Adulte",
+    "UNKNOWN": "Inconnue"
+  }
+}
