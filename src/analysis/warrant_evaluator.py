@@ -14,159 +14,217 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# File: src/analysis/report_generator.py
+# File: src/analysis/warrant_evaluator.py
 # Author: Gabriel Moraes
 # Date: 01 de Outubro de 2025
 
 # -*- coding: utf-8 -*-
 import logging
-import os
 import pandas as pd
-from datetime import datetime
 from utils.settings_manager import SettingsManager
-from utils.locale_manager_backend import LocaleManager
 
-# Configuração do Logger
 logger = logging.getLogger(__name__)
 
-class ReportGenerator:
+class WarrantEvaluator:
     """
-    Gera relatórios técnicos detalhados com base nos dados de análise de infraestrutura.
+    Avalia os 'warrants' (critérios técnicos de engenharia de tráfego) para
+    determinar a necessidade de um semáforo.
     """
-    def __init__(self, settings_manager, locale_manager, data):
+    def __init__(self, settings_manager):
         self.settings = settings_manager
-        self.lm = locale_manager
-        self.analysis_data = data
-        self.timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        self.report_dir = self.settings.get('Paths', 'analysis_reports')
-        os.makedirs(self.report_dir, exist_ok=True)
-        
-        self.parameters = {
-            'min_vph': self.settings.getint('AnalysisParameters', 'warrant_min_vph'),
-            'min_vph_minor': self.settings.getint('AnalysisParameters', 'warrant_min_vph_minor'),
-            'unacceptable_delay': self.settings.getint('AnalysisParameters', 'unacceptable_delay_threshold'),
-            'unacceptable_queue': self.settings.getint('AnalysisParameters', 'unacceptable_queue_threshold'),
-        }
+        logger.debug("WarrantEvaluator inicializado.")
 
-    def generate_report(self, junction_id):
+    def evaluate_warrants(self, junction_id, hourly_data_df):
         """
-        Gera um relatório técnico para um cruzamento específico.
+        Executa todas as avaliações de warrants para um determinado cruzamento.
         """
-        logger.info(self.lm.get_string('report_generator.logging.generating_report', junction_id=junction_id))
+        results = {}
         
-        data = self.analysis_data.get(junction_id)
-        if not data:
-            logger.warning(self.lm.get_string('report_generator.logging.no_data', junction_id=junction_id))
-            return None
-
-        file_path = os.path.join(self.report_dir, f"report_{junction_id}_{self.timestamp}.txt")
+        # Obter dados agregados para o W1 e W2
+        aggregated_data = self._aggregate_data_for_warrants(hourly_data_df)
         
-        try:
-            with open(file_path, 'w', encoding='utf-8') as f:
-                f.write(self.lm.get_string('report_generator.header.title') + "\n")
-                f.write("=" * 80 + "\n")
-                f.write(self.lm.get_string('report_generator.header.junction_id', junction_id=junction_id) + "\n")
-                f.write(self.lm.get_string('report_generator.header.report_date', timestamp=self.timestamp) + "\n")
-                f.write(self.lm.get_string('report_generator.header.analysis_period', hours=data.get('analysis_hours', 'N/A')) + "\n")
-                f.write("-" * 80 + "\n\n")
-
-                # 1. Sumário da Recomendação
-                f.write(self.lm.get_string('report_generator.recommendation.title') + "\n")
-                f.write("-" * 30 + "\n")
-                f.write(f"{self.lm.get_string('report_generator.recommendation.status')}: {self.lm.get_string('recommendation.' + data.get('recommendation', 'error'))}\n")
-                f.write(f"{self.lm.get_string('report_generator.recommendation.reason')}: {self.lm.get_string(data.get('reason', 'reason.unknown'))}\n")
-                f.write("\n")
-
-                # 2. Análise de Métricas de Desempenho
-                f.write(self.lm.get_string('report_generator.performance.title') + "\n")
-                f.write("-" * 30 + "\n")
-                f.write(self._format_metrics(data.get('performance_metrics', {}), self.parameters))
-                f.write("\n")
-
-                # 3. Avaliação de 'Warrants' (Critérios Técnicos)
-                f.write(self.lm.get_string('report_generator.warrants.title') + "\n")
-                f.write("-" * 30 + "\n")
-                f.write(self._format_warrants(data.get('warrant_analysis', {}), self.parameters))
-                f.write("\n")
-
-                # 4. Dados Brutos (DataFrame)
-                f.write(self.lm.get_string('report_generator.raw_data.title') + "\n")
-                f.write("-" * 30 + "\n")
-                df = pd.DataFrame(data.get('hourly_data', []))
-                f.write(df.to_string(index=False))
-                f.write("\n\n")
-
-                f.write("=" * 80 + "\n")
-                f.write(self.lm.get_string('report_generator.footer.end_of_report') + "\n")
-            
-            logger.info(self.lm.get_string('report_generator.logging.report_success', junction_id=junction_id, file_path=file_path))
-            return file_path
-
-        except IOError as e:
-            logger.error(self.lm.get_string('report_generator.logging.report_fail', junction_id=junction_id, error=str(e)))
-            return None
-        except Exception as e:
-            logger.error(self.lm.get_string('report_generator.logging.report_fail_generic', junction_id=junction_id, error=str(e)))
-            return None
-
-    def _format_metrics(self, data, params):
-        """Formata a seção de métricas de desempenho."""
-        p = params
-        d = data
-        summary = []
-        summary.append(self.lm.get_string('report_generator.performance.total_vehicles', value=d.get('total_vehicles', 0)))
-        summary.append(self.lm.get_string('report_generator.performance.peak_hour_volume', value=d.get('peak_vph', 0), hour=d.get('peak_hour', 'N/A')))
+        # Warrant 1: Volume Veicular Mínimo
+        results['W1_MinVehicularVolume'] = self._evaluate_warrant_1(junction_id, hourly_data_df)
         
-        # --- CORREÇÃO (SyntaxError e NameError) ---
-        summary.append(
-            (self.lm.get_string('report_generator.junction.avg_queue', value=f'{d.get('avg_queue', 0):.0f}', threshold=p.get('unacceptable_queue', 'N/A'))),
-            (self.lm.get_string('report_generator.junction.avg_delay', value=f'{d.get('avg_delay', 0):.0f}', threshold=p.get('unacceptable_delay', 'N/A')))
-        )
-        # --- FIM DA CORREÇÃO ---
-        return "\n".join(summary)
-
-    def _format_warrants(self, data, params):
-        """Formata a seção de análise de warrants."""
-        p = params
-        summary = []
-
-        # Warrant 1: Volume Mínimo
-        w1 = data.get('W1_MinVehicularVolume', {})
-        summary.append(self.lm.get_string('report_generator.warrants.w1.title'))
-        summary.append(self.lm.get_string('report_generator.warrants.w1.met', status=self.lm.get_string(f"boolean.{w1.get('met', False)}")))
-        summary.append(self.lm.get_string('report_generator.warrants.w1.hours_met', hours=w1.get('hours_met', 0), required=w1.get('required_hours', 'N/A')))
-        summary.append(self.lm.get_string('report_generator.warrants.w1.peak_vph_major', value=w1.get('peak_vph_major', 0), threshold=p.get('min_vph', 'N/A')))
-        summary.append(self.lm.get_string('report_generator.warrants.w1.peak_vph_minor', value=w1.get('peak_vph_minor', 0), threshold=p.get('min_vph_minor', 'N/A')))
-        summary.append("") # Espaçador
-
-        # Warrant 2: Interrupção de Tráfego
-        w2 = data.get('W2_InterruptionOfContinuousTraffic', {})
-        summary.append(self.lm.get_string('report_generator.warrants.w2.title'))
-        summary.append(self.lm.get_string('report_generator.warrants.w2.met', status=self.lm.get_string(f"boolean.{w2.get('met', False)}")))
-        summary.append(self.lm.get_string('report_generator.warrants.w2.hours_met_major', hours=w2.get('hours_met_major', 0), required=w2.get('required_hours', 'N/A')))
-        summary.append(self.lm.get_string('report_generator.warrants.w2.peak_vph_major', value=w2.get('peak_vph_major', 0), threshold=w2.get('threshold_major', 'N/A')))
-        summary.append(self.lm.get_string('report_generator.warrants.w2.peak_vph_minor', value=w2.get('peak_vph_minor', 0), threshold=w2.get('threshold_minor', 'N/A')))
-        summary.append("") # Espaçador
+        # Warrant 2: Interrupção de Tráfego Contínuo
+        results['W2_InterruptionOfContinuousTraffic'] = self._evaluate_warrant_2(junction_id, aggregated_data)
         
-        # --- CÓDIGO ADICIONADO ---
-
         # Warrant 3: Pico Horário (Atraso/Fila)
-        w3 = data.get('W3_PeakHour', {})
-        summary.append(self.lm.get_string('report_generator.warrants.w3.title'))
-        summary.append(self.lm.get_string('report_generator.warrants.w3.met', status=self.lm.get_string(f"boolean.{w3.get('met', False)}")))
-        summary.append(self.lm.get_string('report_generator.warrants.w3.reason', reason=self.lm.get_string(w3.get('reason', 'reason.not_applicable'))))
-        summary.append(self.lm.get_string('report_generator.warrants.w3.peak_delay', value=f"{w3.get('peak_delay', 0):.0f}", threshold=p.get('unacceptable_delay', 'N/A')))
-        summary.append(self.lm.get_string('report_generator.warrants.w3.peak_queue', value=f"{w3.get('peak_queue', 0):.0f}", threshold=p.get('unacceptable_queue', 'N/A')))
-        summary.append("") # Espaçador
+        results['W3_PeakHour'] = self._evaluate_warrant_3(junction_id, aggregated_data, hourly_data_df)
 
         # Warrant 4: Volume de Pedestres
-        w4 = data.get('W4_PedestrianVolume', {})
-        summary.append(self.lm.get_string('report_generator.warrants.w4.title'))
-        summary.append(self.lm.get_string('report_generator.warrants.w4.met', status=self.lm.get_string(f"boolean.{w4.get('met', False)}")))
-        summary.append(self.lm.get_string('report_generator.warrants.w4.hours_met', hours=w4.get('hours_met', 0), required=w4.get('required_hours', 'N/A')))
-        summary.append(self.lm.get_string('report_generator.warrants.w4.peak_ped_volume', value=w4.get('peak_ped_volume', 0), threshold=w4.get('threshold_ped', 'N/A')))
-        summary.append("") # Espaçador
+        results['W4_PedestrianVolume'] = self._evaluate_warrant_4(junction_id, hourly_data_df)
+        
+        return results
 
-        # --- FIM DO CÓDIGO ADICIONADO ---
+    def _aggregate_data_for_warrants(self, hourly_data_df):
+        """
+        Agrega dados horários para métricas de desempenho de todo o período.
+        """
+        if hourly_data_df.empty:
+            return {
+                'total_vehicles': 0,
+                'avg_delay_stopped': 0,
+                'avg_queue_length': 0,
+                'peak_vph': 0,
+                'peak_hour': -1,
+                'analysis_hours': 0
+            }
+            
+        total_vehicles = hourly_data_df['total_vehicles'].sum()
+        avg_delay = hourly_data_df['avg_delay_stopped'].mean()
+        avg_queue = hourly_data_df['avg_queue_length'].mean()
+        peak_vph = hourly_data_df['total_vehicles'].max()
+        peak_hour = hourly_data_df['total_vehicles'].idxmax()
+        analysis_hours = len(hourly_data_df)
 
-        return "\n".join(summary)
+        return {
+            'total_vehicles': total_vehicles,
+            'avg_delay_stopped': avg_delay,
+            'avg_queue_length': avg_queue,
+            'peak_vph': peak_vph,
+            'peak_hour': peak_hour,
+            'analysis_hours': analysis_hours
+        }
+
+    def _evaluate_warrant_1(self, junction_id, hourly_data_df):
+        """
+        Warrant 1: Condição de Volume Mínimo (Exemplo baseado no MUTCD)
+        Verifica se os volumes horários excedem os mínimos por 8 horas.
+        """
+        logger.debug(f"Avaliando Warrant 1 (Min Volume) para {junction_id}")
+        
+        # Limiares (devem vir do settings.ini)
+        min_vph_major = self.settings.getint('AnalysisParameters', 'warrant_min_vph')
+        min_vph_minor = self.settings.getint('AnalysisParameters', 'warrant_min_vph_minor')
+        required_hours = self.settings.getint('AnalysisParameters', 'warrant_required_hours')
+        
+        # Simulação de dados (no sistema real, isso viria do data collector)
+        # Aqui, estamos a usar os dados horários agregados
+        
+        hours_met = 0
+        peak_vph_major = 0
+        peak_vph_minor = 0
+        
+        if not hourly_data_df.empty:
+            # Simplificação: Usamos o volume total como 'major' e 1/3 como 'minor' para fins de teste
+            # No mundo real, 'vph_major' e 'vph_minor' viriam separados do data collector
+            hourly_data_df['vph_major_calc'] = hourly_data_df['total_vehicles']
+            hourly_data_df['vph_minor_calc'] = hourly_data_df['total_vehicles'] / 3 # Suposição
+            
+            warrant_met_df = hourly_data_df[
+                (hourly_data_df['vph_major_calc'] >= min_vph_major) &
+                (hourly_data_df['vph_minor_calc'] >= min_vph_minor)
+            ]
+            hours_met = len(warrant_met_df)
+            
+            peak_vph_major = hourly_data_df['vph_major_calc'].max()
+            peak_vph_minor = hourly_data_df['vph_minor_calc'].max()
+
+        met = hours_met >= required_hours
+        
+        return {
+            'met': met,
+            'hours_met': hours_met,
+            'required_hours': required_hours,
+            'peak_vph_major': peak_vph_major,
+            'peak_vph_minor': peak_vph_minor
+        }
+
+    def _evaluate_warrant_2(self, junction_id, aggregated_data):
+        """
+        Warrant 2: Interrupção de Tráfego Contínuo (Exemplo)
+        Verifica se o volume da via principal é tão alto que impede o tráfego da via menor.
+        """
+        logger.debug(f"Avaliando Warrant 2 (Interruption) para {junction_id}")
+        
+        # Limiares (exemplo)
+        threshold_major = 700 # VPH na via principal
+        threshold_minor = 70  # VPH na via menor
+        required_hours = self.settings.getint('AnalysisParameters', 'warrant_required_hours')
+        
+        # Simulação (WIP - Lógica de exemplo)
+        # Esta lógica precisaria de dados mais detalhados
+        peak_vph_major = aggregated_data.get('peak_vph', 0) # Usando VPH total como 'major'
+        peak_vph_minor = peak_vph_major / 3 # Suposição
+        hours_met_major = 0 # Simulação
+        
+        if peak_vph_major > threshold_major and peak_vph_minor > threshold_minor:
+            hours_met_major = required_hours # Simulação de que foi atingido
+            
+        met = hours_met_major >= required_hours
+
+        return {
+            'met': met,
+            'hours_met_major': hours_met_major,
+            'required_hours': required_hours,
+            'peak_vph_major': peak_vph_major,
+            'threshold_major': threshold_major,
+            'peak_vph_minor': peak_vph_minor,
+            'threshold_minor': threshold_minor
+        }
+
+    def _evaluate_warrant_3(self, junction_id, data, hourly_data_df):
+        """
+        Warrant 3: Peak Hour
+        Avalia se o tráfego de pico justifica um semáforo com base em atrasos ou filas.
+        """
+        logger.debug(f"Avaliando Warrant 3 (Peak Hour) para {junction_id}")
+        
+        unacceptable_delay = self.settings.getint('AnalysisParameters', 'unacceptable_delay_threshold')
+        unacceptable_queue = self.settings.getint('AnalysisParameters', 'unacceptable_queue_threshold')
+        
+        peak_hour_data = hourly_data_df.loc[hourly_data_df['total_vehicles'].idxmax()]
+        
+        peak_delay = peak_hour_data.get('avg_delay_stopped', 0)
+        peak_queue = peak_hour_data.get('avg_queue_length', 0)
+        
+        met = False
+        reason = "reason.w3.conditions_not_met"
+
+        if peak_delay > unacceptable_delay:
+            met = True
+            reason = "reason.w3.unacceptable_delay"
+        elif peak_queue > unacceptable_queue:
+            met = True
+            reason = "reason.w3.unacceptable_queue"
+            
+        return {
+            'met': met,
+            'reason': reason,
+            'peak_delay': peak_delay,
+            'peak_queue': peak_queue
+        }
+
+    def _evaluate_warrant_4(self, junction_id, hourly_data_df):
+        """
+        Warrant 4: Volume de Pedestres (Exemplo)
+        """
+        logger.debug(f"Avaliando Warrant 4 (Pedestrian) para {junction_id}")
+        
+        # Limiares (exemplo)
+        threshold_ped = 100 # Pedestres por hora
+        required_hours = 4  # (Diferente do W1/W2)
+        
+        # Simulação (WIP - Lógica de exemplo)
+        # O data collector precisaria fornecer 'ped_volume_hourly'
+        
+        # Vamos assumir 0 por agora, pois não temos dados de pedestres
+        peak_ped_volume = 0 
+        hours_met = 0
+        
+        if 'ped_volume_hourly' in hourly_data_df.columns:
+            peak_ped_volume = hourly_data_df['ped_volume_hourly'].max()
+            hours_met = len(hourly_data_df[hourly_data_df['ped_volume_hourly'] >= threshold_ped])
+        else:
+            logger.warning(f"Sem dados de 'ped_volume_hourly' para Warrant 4 em {junction_id}. Assumindo 0.")
+
+        met = hours_met >= required_hours
+
+        return {
+            'met': met,
+            'hours_met': hours_met,
+            'required_hours': required_hours,
+            'peak_ped_volume': peak_ped_volume,
+            'threshold_ped': threshold_ped
+        }
