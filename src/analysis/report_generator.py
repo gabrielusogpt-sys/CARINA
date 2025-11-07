@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# File: src/analysis/report_generator.py (MODIFICADO PARA TRADUÇÃO)
+# File: src/analysis/report_generator.py (CORREÇÃO DEFINITIVA - SyntaxError f-string)
 # Author: Gabriel Moraes
 # Date: 01 de Outubro de 2025
 
@@ -109,11 +109,19 @@ class ReportGenerator:
             else:
                 report.append(f"  - {lm.get_string('report_generator.junction.volume_primary', value=d.get('vol_primary_val', 0), threshold=p.get('min_volume_primary', 'N/A'))}")
 
+            # --- CORREÇÃO COMPLETA DAS F-STRINGS ---
+            # Corrigindo todas as f-strings problemáticas
+            volume_secondary_str = f"  - {lm.get_string('report_generator.junction.volume_secondary', value=d.get('vol_secondary_val', 0), threshold=p.get('min_volume_secondary', 'N/A'))}"
+            avg_delay_value = f"{d.get('avg_delay', 0):.0f}"
+            avg_delay_str = f"  - {lm.get_string('report_generator.junction.avg_delay', value=avg_delay_value, threshold=p.get('unacceptable_delay', 'N/A'))}"
+            conflict_events_str = f"  - {lm.get_string('report_generator.junction.conflict_events', value=d.get('conflict_events', 0), threshold=p.get('conflict_threshold', 'N/A'))}"
+            
             report.extend([
-                f"  - {lm.get_string('report_generator.junction.volume_secondary', value=d.get('vol_secondary_val', 0), threshold=p.get('min_volume_secondary', 'N/A'))}",
-                f"  - {lm.get_string('report_generator.junction.avg_delay', value=f'{d.get('avg_delay', 0):.0f}', threshold=p.get('unacceptable_delay', 'N/A'))}",
-                f"  - {lm.get_string('report_generator.junction.conflict_events', value=d.get('conflict_events', 0), threshold=p.get('conflict_threshold', 'N/A'))}"
+                volume_secondary_str,
+                avg_delay_str,
+                conflict_events_str
             ])
+            # --- FIM DA CORREÇÃO ---
 
         report.extend([
             f"\n\n{lm.get_string('report_generator.footer.title1')}",

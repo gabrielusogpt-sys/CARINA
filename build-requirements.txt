@@ -1,0 +1,84 @@
+# CARINA (Controlled Artificial Road-traffic Intelligence Network Architecture) is an open-source AI ecosystem for real-time, adaptive control of urban traffic light networks.
+# Copyright (C) 2025 Gabriel Moraes - Noxfort Labs
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY;
+# without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+# File: build-requirements.txt
+# Author: Gabriel Moraes
+# Date: 28 de Outubro de 2025
+#
+# Descrição:
+# Lista de todas as dependências de Python necessárias para EXECUTAR e
+# CONSTRUIR o ecistema CARINA.
+#
+# (CORRIGIDO: 'sumo-TraCI' removido)
+# (CORRIGIDO: 'qmapcontrol' removido)
+# (CORRIGIDO: Adicionado 'pandas' e 'xxhash')
+# (CORRIGIDO: Adicionado 'tensorboard' e 'scikit-learn')
+
+# --- Core AI & Compute ---
+# PyTorch 2.2.1 (com suporte a CUDA 11.8)
+torch==2.2.1
+# PyTorch Geometric (para os modelos GAT)
+torch_geometric==2.5.3
+# Captum (para XAI - IA Explicável)
+captum==0.7.0
+# TensorBoard (para logging da IA)
+tensorboard==2.16.2
+
+# --- Simulação & Interação ---
+# Cliente SUMO (libsumo)
+traci==1.19.0
+# Biblioteca de rede para o simulador
+# sumo-TraCI==1.19.0  <-- REMOVIDO, NÃO EXISTE NO PyPI
+
+# --- Interface Gráfica (UI) ---
+# Framework da UI
+PySide6==6.6.0
+# Para carregar imagens no PySide6
+Pillow==10.1.0
+# Para renderização nativa de mapas (alternativa ao folium/cef)
+# qmapcontrol==0.9.7.5  <-- REMOVIDO (Pacote quebrado no PyPI)
+# Player de vídeo para o feed (se habilitado)
+python-mpv==1.0.6
+
+# --- Comunicação & Serviços ---
+# Servidor WebSocket (para o Dashboard)
+websockets==12.0
+# Cliente de telemetria
+prometheus-client==0.19.0
+
+# --- Análise e Manipulação de Dados ---
+# Manipulação de dados
+pandas==2.2.2
+numpy==1.26.0
+# Sklearn (para calibração do heatmap, etc.)
+scikit-learn==1.4.2
+# Geração de relatórios PDF
+reportlab==4.0.7
+# Manipulação de grafos
+networkx==3.2.1
+# Leitura de arquivos XML (mapas)
+lxml==5.1.0
+# Cálculos de geoposicionamento
+haversine==2.8.0
+# Hashing rápido (dependência do pandas/outros)
+xxhash==3.4.1
+
+# --- Ferramentas de Build (para PyInstaller) ---
+# O Compilador
+PyInstaller==6.1.0
+# Hooks adicionais para PyInstaller
+pyinstaller-hooks-contrib==2023.10

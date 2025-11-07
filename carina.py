@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# File: carina.py (CORRIGIDO - Lógica da UI restaurada)
+# File: carina.py (CORRIGIDO - Process Bomb / Fork Bomb)
 # Author: Gabriel Moraes
 # Date: 27 de Outubro de 2025
 
@@ -92,7 +92,7 @@ try:
 
 except ImportError as e:
      print(f"CRITICAL PRE-LOGGING IMPORT ERROR: {e}")
-     # ... (lógica de log de emergência inalterada) ...
+     # (O código de log de emergência original estaria aqui)
      sys.exit(1)
 # --- Fim ---
 
@@ -170,7 +170,7 @@ def run_controller_process(settings: configparser.ConfigParser, pipe_conn: Conne
     logging.info("[CentralController Process] Exiting.")
 # >>>>> Fim da definição da função run_controller_process <<<<<
 
-# --- INÍCIO DA FUNÇÃO DE UI RESTAURADA ---
+# --- INÍCIO DA FUNÇÃO DE UI ---
 def run_ui_process(log_dir: str):
     """Inicia o processo da UI (Flet) como um subprocesso separado."""
     logging.info("[Launcher] Iniciando processo da UI...")
@@ -181,9 +181,15 @@ def run_ui_process(log_dir: str):
         # Prepara o log
         ui_log_path = os.path.join(log_dir, "ui_process.log")
         
-        # Usa 'sys.executable' para garantir que está usando o mesmo interpretador python
-        # (especialmente importante em ambientes virtuais como o 'venv')
-        command = [sys.executable, ui_script_path]
+        # SE NÃO ESTIVER CONGELADO (Dev), use sys.executable (que é o python do venv)
+        if not IS_FROZEN:
+            command = [sys.executable, ui_script_path]
+            logging.info(f"Modo DEV: Usando sys.executable (python do venv).")
+        else:
+        # SE ESTIVER CONGELADO (Prod), não podemos usar sys.executable.
+            command = ["python3", ui_script_path]
+            logging.warning(f"Modo CONGELADO: Tentando usar 'python3' do sistema.")
+
         
         logging.info(f"Comando de execução da UI: {' '.join(command)}")
         logging.info(f"Log da UI (stdout/stderr) será redirecionado para: {ui_log_path}")
@@ -201,10 +207,14 @@ def run_ui_process(log_dir: str):
         logging.info(f"Processo da UI iniciado com PID: {process.pid}")
         return process
     
+    except FileNotFoundError:
+        logging.critical(f"Falha CRÍTICA ao iniciar a UI: 'python3' não foi encontrado no PATH.", exc_info=True)
+        logging.critical("O backend continuará, mas a UI não estará disponível.")
+        return None
     except Exception as e:
         logging.critical(f"Falha CRÍTICA ao iniciar o processo da UI: {e}", exc_info=True)
         return None
-# --- FIM DA FUNÇÃO DE UI RESTAURADA ---
+# --- FIM DA FUNÇÃO DE UI ---
 
 
 def main():
@@ -270,15 +280,25 @@ def main():
     try:
         logging.info("Preparing all processes...")
 
-        # --- Iniciar UI (RESTAURADO) ---
+        # --- Iniciar UI ---
         logging.info("Iniciando processo da UI...")
         ui_log_dir = os.path.join(launcher_log_dir, "ui_logs")
         os.makedirs(ui_log_dir, exist_ok=True)
-        ui_process = run_ui_process(ui_log_dir) # Chama a nova função
+        
+        # --- INÍCIO DA CORREÇÃO (Process Bomb) ---
+        # A chamada original para run_ui_process foi comentada para
+        # impedir a "bomba de processos" (recursão infinita).
+        # A função run_ui_process() NÃO deve ser chamada daqui quando CONGELADO.
+        # ui_process = run_ui_process(ui_log_dir) # <-- NÃO CHAMAR
+        
+        ui_process = None 
+        logging.warning("LANÇAMENTO DA UI FOI DESABILITADO TEMPORARIAMENTE NO 'carina.py' (linha 260-264) PARA PREVENIR A BOMBA DE PROCESSOS.")
+        # --- FIM DA CORREÇÃO ---
+
         if ui_process:
             logging.info(f" -> UI Process (PID: {ui_process.pid}) [Log: {ui_log_dir}/ui_process.log]")
         else:
-            logging.error("Falha ao iniciar a UI. O backend continuará sem ela.")
+            logging.error("Falha ao iniciar a UI (ou foi desabilitada). O backend continuará sem ela.")
         # --- Fim Iniciar UI ---
 
 
@@ -320,7 +340,7 @@ def main():
         # --- Fim Logs ---
 
         print("-" * 50)
-        logging.info("CARINA system running with FULL BACKEND + UI.")
+        logging.info("CARINA system running with FULL BACKEND (UI DISABLED).") # Mensagem corrigida
 
         # Aguarda o processo central terminar (ou ser interrompido)
         logging.info("Waiting for Central Controller process to join...")
@@ -384,6 +404,9 @@ def main():
         logging.info("System shutdown.")
         logging.info("--- CARINA LAUNCHER FINISHED ---")
 
+# A VERIFICAÇÃO __name__ == "__main__" É A CHAVE PARA PARAR A "BOMBA DE PROCESSOS"
+# ELA GARANTE QUE A FUNÇÃO main() SÓ EXECUTE QUANDO O SCRIPT É CHAMADO DIRETAMENTE,
+# E NÃO QUANDO É IMPORTADO POR UM PROCESSO FILHO.
 if __name__ == "__main__":
     multiprocessing.freeze_support() # Primeira linha
 

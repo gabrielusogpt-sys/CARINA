@@ -7,21 +7,21 @@
 # License, or (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# but WITHOUT ANY WARRANTY;
+# without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU Affero General Public License for more details.
 #
 # You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-# File: Dockerfile (CORRIGIDO - Adiciona 'universe' manualmente)
+# File: Dockerfile
 # Author: Gabriel Moraes
 # Date: 28 de Outubro de 2025
 #
 # Descrição:
 # Este Dockerfile é otimizado para PyInstaller e PyTorch (com CUDA).
 # Ele usa um build multi-stage para manter a imagem final leve.
-
 # =====================================================================
 # ESTÁGIO 1: BUILDER
 # Baseado na imagem oficial do PyTorch com CUDA 11.8 e Python 3.11
@@ -36,43 +36,37 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# --- CORREÇÃO: Adiciona 'universe' manualmente e combina o 'install' ---
-# 1. Atualiza listas
-# 2. Adiciona os repositórios 'universe' (main e updates) diretamente ao sources.list
-# 3. Atualiza as listas DE NOVO (para ler o 'universe' recém-adicionado)
-# 4. Instala todos os pacotes de sistema necessários (incluindo bcc e libmpv2)
+# --- CORREÇÃO 5 ---
+# O pacote 'qmapcontrol==0.9.7.5' não suporta Python 3.11.
+# Fazendo o downgrade do ambiente de build para Python 3.10.
 RUN apt-get update && \
-    echo "deb http://archive.ubuntu.com/ubuntu/ jammy universe" >> /etc/apt/sources.list && \
-    echo "deb http://archive.ubuntu.com/ubuntu/ jammy-updates universe" >> /etc/apt/sources.list && \
-    apt-get update && \
     apt-get install -y \
-        python3.11 \
-        python3.11-venv \
-        python3.11-dev \
+        python3.10 \
+        python3.10-venv \
+        python3.10-dev \
         python3-pip \
         build-essential \
         patchelf \
         upx \
-        python3-bcc \
-        libmpv2 \
+        libmpv-dev \
     && rm -rf /var/lib/apt/lists/*
-# --- FIM DA CORREÇÃO ---
+# --- FIM DA CORREÇÃO 5 ---
 
-# Cria o symlink para libmpv.so.1
-RUN ln -s /usr/lib/x86_64-linux-gnu/libmpv.so.2 /usr/lib/x86_64-linux-gnu/libmpv.so.1
+# Força o link simbólico para libmpv.so.1
+RUN ln -sf /usr/lib/x86_64-linux-gnu/libmpv.so.2 /usr/lib/x86_64-linux-gnu/libmpv.so.1
 
-# Cria e ativa um ambiente virtual
-RUN python3.11 -m venv /app/venv
+# --- CORREÇÃO 5 ---
+# Cria e ativa um ambiente virtual com Python 3.10
+RUN python3.10 -m venv /app/venv
+# --- FIM DA CORREÇÃO 5 ---
 ENV PATH="/app/venv/bin:$PATH"
 
 # Atualiza o pip
 RUN pip install --upgrade pip
 
-# Copia o arquivo de requisitos de build (o que foi corrigido, sem 'bcc')
+# Copia o arquivo de requisitos de build (o corrigido, com 'qmapcontrol')
 COPY build-requirements.txt .
-
 # Instala os requisitos de Python
-# (Usamos build-requirements.txt aqui, que é a versão "congelada" do requirements.txt)
 RUN pip install --no-cache-dir -r build-requirements.txt
 
 # Copia todo o código-fonte do CARINA para o container
@@ -93,22 +87,17 @@ WORKDIR /app
 # Define variáveis de ambiente para evitar prompts interativos
 ENV DEBIAN_FRONTEND=noninteractive
 
-# --- CORREÇÃO: Adiciona 'universe' manualmente e combina o 'install' ---
+# Instala dependências de sistema (runtime do libmpv)
 RUN apt-get update && \
-    echo "deb http://archive.ubuntu.com/ubuntu/ jammy universe" >> /etc/apt/sources.list && \
-    echo "deb http://archive.ubuntu.com/ubuntu/ jammy-updates universe" >> /etc/apt/sources.list && \
-    apt-get update && \
     apt-get install -y \
-        python3-bcc \
-        libmpv2 \
+        libmpv-dev \
+        libmpv1 \
     && rm -rf /var/lib/apt/lists/*
-# --- FIM DA CORREÇÃO ---
 
-# Cria o symlink para libmpv.so.1
-RUN ln -s /usr/lib/x86_64-linux-gnu/libmpv.so.2 /usr/lib/x86_64-linux-gnu/libmpv.so.1
+# Força o link simbólico para libmpv.so.1
+RUN ln -sf /usr/lib/x86_64-linux-gnu/libmpv.so.2 /usr/lib/x86_64-linux-gnu/libmpv.so.1
 
 # Copia o executável construído do estágio anterior
 COPY --from=builder /app/dist/carina /app/dist/carina
 
 # O entrypoint é apenas o executável (não é necessário, mas define o padrão)
-ENTRYPOINT ["/app/dist/carina/carina"]
