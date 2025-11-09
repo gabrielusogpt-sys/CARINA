@@ -9,36 +9,76 @@ project_base = os.getcwd()
 print(f"INFO: Project base directory detected as: {project_base}")
 # --- Fim ---
 
-# --- Bloco do venv/site-packages REMOVIDO/Comentado ---
-# O build do Docker instala pacotes globalmente, não em um venv.
-# Não precisamos mais desse bloco, pois 'hiddenimports' cuidará disso.
-# venv_path = os.path.join(project_base, 'venv')
-# python_version_major_minor = f'python{sys.version_info.major}.{sys.version_info.minor}'
-# site_packages_path = os.path.join(venv_path, 'lib', python_version_major_minor, 'site-packages')
-# if not os.path.exists(site_packages_path):
-#     print(f"AVISO: Caminho site-packages não encontrado automaticamente em {site_packages_path}. Verifique a estrutura do venv.")
-#     # Defina um caminho fixo aqui se necessário, ou ajuste a lógica se o venv estiver em 
-# outro lugar
-#     # Exemplo: site_packages_path = '/path/to/your/venv/lib/pythonX.Y/site-packages'
-# else:
-#      print(f"INFO: Usando site-packages de: {site_packages_path}")
-# --- Fim ---
+# --- Bloco de Coleta Seguro (v7) ---
+# Inicializa as listas
+all_hiddenimports = []
+all_datas = []
+all_binaries = []
 
-
-# --- Definição dos Pacotes e Bibliotecas ---
-
-# 1. Binários:
-# Bibliotecas .so cruciais que o PyInstaller pode não encontrar.
-# (libmpv.so.1 é necessário para o player de vídeo python-mpv)
-binaries = [
-    ('/usr/lib/x86_64-linux-gnu/libmpv.so.1', '.'),
-    ('/usr/lib/x86_64-linux-gnu/libmpv.so.2', '.')
+# Lista de pacotes que precisam de coleta profunda
+packages_to_collect = [
+    'torch_geometric',
+    'captum',
+    'pandas',
+    'scipy',
+    'sklearn',
+    'websockets'
 ]
 
-# 2. Dados:
-# Inclui todos os assets da UI (ícones, logos, fontes) e
-# todos os arquivos de localização (.json).
-datas = [
+def _is_valid_spec(item):
+    """Verifica se um item está no formato (str, str) que o PyInstaller espera."""
+    return (
+        isinstance(item, (list, tuple)) and
+        len(item) == 2 and
+        isinstance(item[0], str) and
+        isinstance(item[1], str)
+    )
+
+print("INFO: Iniciando coleta profunda de pacotes...")
+for package in packages_to_collect:
+    try:
+        print(f"INFO: Coletando de '{package}'...")
+        # Coleta tudo que o pacote precisa
+        hi, da, bi = collect_all(package)
+        
+        # Adiciona os resultados às listas, verificando se não são Nulos
+        if hi:
+            all_hiddenimports.extend(hi)
+        
+        # --- CORREÇÃO v7 (ValueError) ---
+        # Filtramos agressivamente para incluir APENAS 2-tuplas de strings.
+        if da:
+            for item in da:
+                if _is_valid_spec(item):
+                    all_datas.append(item)
+                else:
+                    print(f"AVISO (data): Ignorando item mal formatado de '{package}': {item}")
+        
+        if bi:
+            for item in bi:
+                if _is_valid_spec(item):
+                    all_binaries.append(item)
+                else:
+                    print(f"AVISO (binary): Ignorando item mal formatado de '{package}': {item}")
+        # --- Fim da Correção v7 ---
+
+        print(f"INFO: Coleta de '{package}' concluída.")
+    except Exception as e:
+        print(f"ERRO: Falha ao coletar de '{package}'. Erro: {e}")
+        raise # Para o build se a coleta falhar
+
+print("INFO: Coleta profunda de pacotes concluída.")
+
+# --- Adiciona importações manuais (Correções) ---
+all_hiddenimports.extend([
+    'PySide6.QtSvg',
+    'PySide6.QtNetwork',
+    # --- CORREÇÃO 1 (Erro do AI Process) ---
+    'scipy._lib.array_api_compat.numpy.fft'
+])
+
+# --- Adiciona Dados do Projeto (Assets, Configs) ---
+all_datas.extend([
     # Assets da UI
     (os.path.join(project_base, 'ui/assets'), 'ui/assets'),
     # Assets de localização da UI
@@ -47,23 +87,9 @@ datas = [
     (os.path.join(project_base, 'src/locale_backend'), 'locale_backend'),
     # Arquivo de Configuração
     (os.path.join(project_base, 'config/settings.ini'), 'config')
-]
+])
+# --- Fim da Coleta ---
 
-# 3. Importações Ocultas (Hidden Imports):
-# A parte MAIS IMPORTANTE. Diz ao PyInstaller quais módulos 
-# ele deve incluir, mesmo que não os encontre estaticamente.
-# Isso corrige a maioria dos erros "No module named '...'".
-hiddenimports = collect_all('torch_geometric')[0] + \
-                collect_all('captum')[0] + \
-                collect_all('pandas')[0] + \
-                collect_all('scipy')[0] + \
-                collect_all('sklearn')[0] + \
-                collect_all('websockets')[0] + \
-                ['PySide6.QtSvg', 'PySide6.QtNetwork', 
-                 # --- CORREÇÃO 1 (Erro do AI Process) ---
-                 # Adiciona o submódulo 'fft' do scipy que faltava
-                 'scipy._lib.array_api_compat.numpy.fft'
-                ]
 
 # 4. Hooks de Runtime:
 # O hook personalizado para adicionar 'src' ao sys.path.
@@ -73,9 +99,12 @@ a = Analysis(
     ['carina.py'], # Script principal na raiz
     
     pathex=[project_base], # Adiciona a raiz do projeto ao path de análise
-    binaries=binaries,
-    datas=datas,
-    hiddenimports=hiddenimports,
+    
+    # Passa as listas filtradas e corretas
+    binaries=all_binaries,
+    datas=all_datas,
+    hiddenimports=all_hiddenimports,
+    
     hookspath=[],
     hooksconfig={},
     runtime_hooks=runtime_hooks, # Hook está em src/hooks
@@ -125,4 +154,4 @@ coll = COLLECT(
     upx=False, # UPX Desativado
     upx_exclude=[],
     name='carina' # Nome da pasta final em 'dist/'
-)   
+)
